@@ -8,6 +8,8 @@
 [![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-fairlens--india.run.app-0ea5e9?style=for-the-badge&logoColor=white)](https://fairlens-india.run.app)
 [![Google Solution Challenge](https://img.shields.io/badge/Google_Solution_Challenge-2026-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://hack2skill.com)
 [![Track](https://img.shields.io/badge/Track-Unbiased_AI_Decision-818cf8?style=for-the-badge&logoColor=white)](https://hack2skill.com)
+[![Status](https://img.shields.io/badge/Status-In_Development-yellow?style=for-the-badge&logoColor=black)](#-development-status)
+[![Progress](https://img.shields.io/badge/Progress-Work_In_Progress-yellow?style=for-the-badge&logoColor=black)](#-development-status)
 
 <br/>
 
@@ -57,6 +59,26 @@ A woman from rural Karnataka — same income, same credit score as an urban man 
 </td>
 </tr>
 </table>
+
+---
+
+## 🚧 Development Status
+
+> FairLens India is a **hackathon project under active development**.
+> The README reflects the **full target vision** for final submission.
+
+### Current Build (what is live in this repo now)
+
+- ✅ FastAPI backend with working `/health`, `/counter`, `/audit`, `/correct`, `/report`
+- ✅ Fairness core modules connected: SHAP, Fairlearn scoring/correction, report generation
+- ✅ Modern static landing page with splash screen + interactive Audit modal flow
+- ✅ Audit popup supports model/dataset upload and fairness result rendering
+
+### In Progress (what we are actively building next)
+
+- 🔄 Advanced React/Vite product frontend layer for full multi-tab experience
+- 🔄 Expanded visual analytics and richer report interactions
+- 🔄 Deployment/documentation polish for final hackathon demo package
 
 ---
 
@@ -262,7 +284,19 @@ Developer opens FairLens India (React UI)
 
 ## 🔧 Tech Stack
 
+> Note: This section includes both **current implementation** and **target hackathon stack**.
+
 ### Frontend
+
+#### Current implementation in this repository
+
+| Technology | Purpose |
+|-----------|---------|
+| **HTML5** | Landing + audit popup UI |
+| **CSS3** | Design system, animations, responsive layout |
+| **Vanilla JavaScript** | Modal logic, audit form flow, API integration |
+
+#### Target stack for final hackathon build
 
 | Technology | Version | Purpose |
 |-----------|---------|---------|
@@ -299,6 +333,9 @@ Developer opens FairLens India (React UI)
 ---
 
 ## 📁 Project Structure
+
+> Current branch uses a flat static frontend (`index.html`, `styles.css`, `script.js`) plus `backend/`.
+> The structure below represents the target final architecture we are building toward.
 
 ```
 fairlens-india/
@@ -343,6 +380,21 @@ fairlens-india/
 ---
 
 ## 🚀 Quickstart
+
+### Quickstart (current repository state)
+
+```bash
+# from repo root
+python -m uvicorn backend.main:app --host 0.0.0.0 --port 8080 --reload
+```
+
+Open frontend using your static server (for example VS Code Live Server):
+
+```
+http://127.0.0.1:5500/index.html
+```
+
+### Quickstart (target React/Vite setup - in progress)
 
 ```bash
 # Clone
