@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="FairLens India is a modern fairness intelligence platform for responsible AI in India." />
+    <title>FairLens India | Responsible AI Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Outfit:wght@500;600;700;800&family=Urbanist:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="is-locked">
+    <div class="splash-screen" id="splashScreen" aria-hidden="true">
+      <div class="splash-overlay"></div>
+      <div class="splash-content">
+        <span class="splash-mark">FL</span>
+        <div class="splash-title-block">
+          <h1>FairLens India</h1>
+          <p>Fairness Intelligence for AI Decisions</p>
+          <span class="splash-sub">Responsible AI Intelligence Platform</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-backdrop" aria-hidden="true"></div>
+
+    <main class="site-shell">
+      <header class="topbar reveal">
+        <a href="#hero" class="brand" aria-label="FairLens India home">
+          <span class="brand-mark">FL</span>
+          <span class="brand-text">
+            <strong>FairLens India</strong>
+            <small>Fair AI for Real-World Decisions</small>
+          </span>
+        </a>
+
+        <nav class="main-nav" aria-label="Primary">
+          <a href="#about">About</a>
+          <a href="#next-tech">NextTech Features</a>
+          <a href="#how-it-works">How It Works</a>
+          <a href="#workflow">Workflow</a>
+          <a href="#footer">Contact</a>
+        </nav>
+
+        <button class="button button-ghost" id="openAuditTop" type="button">Audit Now</button>
+      </header>
+
+      <section class="section hero reveal" id="hero">
+        <div class="hero-left">
+          <img src="Public/Assets/landingpage2.png" alt="FairLens dashboard preview" />
+        </div>
+
+        <div class="hero-right" id="about">
+          <p class="eyebrow">About The Project</p>
+          <h1>Building trust-first AI infrastructure for India.</h1>
+          <p class="lead">
+            FairLens India detects bias, explains fairness risk in plain language, and generates corrected model outputs.
+            It gives teams a practical governance layer before models impact people.
+          </p>
+          <div class="hero-actions">
+            <button class="button button-primary" id="openAuditHero" type="button">Audit Now</button>
+            <a class="button button-soft" href="#workflow">See Workflow</a>
+          </div>
+          <div class="hero-points">
+            <article>
+              <h3>Fast auditing</h3>
+              <p>Run fairness assessments in minutes, not weeks.</p>
+            </article>
+            <article>
+              <h3>Clear explanations</h3>
+              <p>Translate technical signals into leadership-ready insights.</p>
+            </article>
+            <article>
+              <h3>Actionable outputs</h3>
+              <p>Export corrected artifacts and audit reports immediately.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section next-tech" id="next-tech">
+        <div class="section-head reveal">
+          <p class="eyebrow">NextTech Features</p>
+          <h2>Modern fairness tooling designed like a product, not a notebook.</h2>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-card reveal">
+            <img src="Public/Assets/mainapp.png" alt="Main application interface" />
+            <h3>SHAP Bias Lens</h3>
+            <p>Isolate sensitive feature influence with interpretable, high-signal diagnostics.</p>
+          </article>
+
+          <article class="feature-card reveal">
+            <img src="Public/Assets/picture1.png" alt="Visual fairness insights" />
+            <h3>Fairlearn Scoring</h3>
+            <p>Measure parity and odds metrics with threshold-driven evaluation for policy alignment.</p>
+          </article>
+
+          <article class="feature-card reveal">
+            <img src="Public/Assets/landingpage1.png" alt="Plain-language report visualization" />
+            <h3>Governance Explainability</h3>
+            <p>Generate plain-English fairness narratives for product, legal, and compliance teams.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section how-it-works" id="how-it-works">
+        <div class="section-head reveal">
+          <p class="eyebrow">How It Works</p>
+          <h2>One guided experience from upload to trusted model release.</h2>
+        </div>
+
+        <div class="how-grid">
+          <article class="how-card reveal">
+            <span>Step 1</span>
+            <h3>Upload</h3>
+            <p>Attach model and validation data with identified sensitive columns.</p>
+          </article>
+
+          <article class="how-card reveal">
+            <span>Step 2</span>
+            <h3>Evaluate</h3>
+            <p>Run bias detection, fairness scoring, and risk explanation in one pipeline.</p>
+          </article>
+
+          <article class="how-card reveal">
+            <span>Step 3</span>
+            <h3>Correct + Export</h3>
+            <p>Apply fairness correction and download report-ready outcomes.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section workflow" id="workflow">
+        <div class="section-head reveal">
+          <p class="eyebrow">Workflow Architecture</p>
+          <h2>Production-grade fairness pipeline across five controlled stages.</h2>
+        </div>
+
+        <div class="workflow-grid">
+          <article class="flow-step reveal">
+            <strong>01</strong>
+            <h3>Ingest</h3>
+            <p>Model and data intake with schema awareness.</p>
+          </article>
+          <article class="flow-step reveal">
+            <strong>02</strong>
+            <h3>Diagnose</h3>
+            <p>Detect sensitive drivers and imbalance vectors.</p>
+          </article>
+          <article class="flow-step reveal">
+            <strong>03</strong>
+            <h3>Score</h3>
+            <p>Quantify parity, equalized odds, and opportunity gaps.</p>
+          </article>
+          <article class="flow-step reveal">
+            <strong>04</strong>
+            <h3>Explain</h3>
+            <p>Create stakeholder-friendly narrative intelligence.</p>
+          </article>
+          <article class="flow-step reveal">
+            <strong>05</strong>
+            <h3>Remediate</h3>
+            <p>Retrain, validate, and publish corrected model outputs.</p>
+          </article>
+        </div>
+      </section>
+
+      <footer class="footer section reveal" id="footer">
+        <div class="footer-main">
+          <div class="footer-brand">
+            <span class="brand-mark">FL</span>
+            <div>
+              <h3>FairLens India</h3>
+              <p>Responsible AI intelligence for high-impact decisions across India.</p>
+            </div>
+          </div>
+
+          <div class="footer-cta">
+            <button class="button button-primary" id="openAuditFooter" type="button">Audit Now</button>
+            <a class="button button-soft" href="mailto:hello@fairlens.example">Request Enterprise Demo</a>
+            <a class="button button-soft" href="#hero">Back to Top</a>
+          </div>
+        </div>
+
+        <div class="footer-links">
+          <div>
+            <h4>Platform</h4>
+            <a href="#about">About Project</a>
+            <a href="#next-tech">Features</a>
+            <a href="#workflow">Workflow</a>
+          </div>
+          <div>
+            <h4>Technology</h4>
+            <p>SHAP</p>
+            <p>Fairlearn</p>
+            <p>LLM Explainability</p>
+          </div>
+          <div>
+            <h4>Status</h4>
+            <p>Fairness-first pipeline</p>
+            <p>Audit-friendly output</p>
+            <p id="yearStamp">2026</p>
+          </div>
+        </div>
+      </footer>
+    </main>
+
+    <div class="audit-modal" id="auditModal" aria-hidden="true">
+      <div class="audit-modal-overlay" id="auditModalOverlay"></div>
+      <section class="audit-modal-panel" role="dialog" aria-modal="true" aria-label="FairLens Audit Console">
+        <header class="audit-modal-head">
+          <div>
+            <p class="eyebrow">Main Core Logic</p>
+            <h2>FairLens Audit Console</h2>
+          </div>
+          <button class="modal-close" id="closeAuditModal" type="button" aria-label="Close audit modal">&times;</button>
+        </header>
+
+        <div class="audit-modal-body">
+          <aside class="core-logic-pane">
+            <h3>Pipeline Logic</h3>
+            <ol>
+              <li><strong>Upload</strong><span>Model + dataset intake</span></li>
+              <li><strong>Detect</strong><span>SHAP sensitive-feature influence</span></li>
+              <li><strong>Score</strong><span>Fairlearn fairness metrics</span></li>
+              <li><strong>Explain</strong><span>LLM plain-language summary</span></li>
+              <li><strong>Correct</strong><span>Fairness-constrained remediation</span></li>
+            </ol>
+            <p class="logic-note">This popup runs your main project flow through the backend audit endpoint.</p>
+          </aside>
+
+          <div class="audit-runtime-pane">
+            <div class="audit-tabs" role="tablist" aria-label="Audit console tabs">
+              <button class="audit-tab active" type="button" data-audit-tab="input" aria-selected="true">Input</button>
+              <button class="audit-tab" type="button" data-audit-tab="metrics" aria-selected="false">Metrics</button>
+              <button class="audit-tab" type="button" data-audit-tab="explain" aria-selected="false">Explanation</button>
+            </div>
+
+            <div class="audit-panel active" id="auditPanelInput">
+              <form class="audit-form" id="tryAuditForm">
+                <label for="modelFile">Model file (.pkl)</label>
+                <input id="modelFile" name="model_file" type="file" accept=".pkl" required />
+
+                <label for="datasetFile">Dataset file (.csv)</label>
+                <input id="datasetFile" name="dataset_file" type="file" accept=".csv" required />
+
+                <label for="sensitiveCols">Sensitive columns</label>
+                <select id="sensitiveCols" name="sensitive_cols" multiple></select>
+
+                <div class="threshold-row">
+                  <label for="fairnessThreshold">Fairness threshold</label>
+                  <span id="thresholdValue">0.10</span>
+                </div>
+                <input id="fairnessThreshold" name="fairness_threshold" type="range" min="0.05" max="0.20" step="0.01" value="0.10" />
+
+                <button class="button button-primary" id="runAuditBtn" type="submit">Run Full Audit</button>
+              </form>
+            </div>
+
+            <div class="audit-panel" id="auditPanelMetrics">
+              <div class="audit-output" id="tryOutput">
+                <p class="status-text" id="auditStatus">Upload files and run audit.</p>
+                <div class="audit-results" id="auditResults" hidden>
+                  <div class="result-cards">
+                    <article>
+                      <p>Demographic parity</p>
+                      <h3 id="dpValue">-</h3>
+                    </article>
+                    <article>
+                      <p>Equalized odds</p>
+                      <h3 id="eoValue">-</h3>
+                    </article>
+                    <article>
+                      <p>Equal opportunity</p>
+                      <h3 id="eopValue">-</h3>
+                    </article>
+                  </div>
+                  <div class="result-block">
+                    <h4>Bias flags</h4>
+                    <ul id="biasFlagsList"></ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="audit-panel" id="auditPanelExplain">
+              <div class="audit-output">
+                <p class="status-text">Plain-language narrative generated after audit run.</p>
+                <div class="result-block explain-block">
+                  <h4>Plain-English explanation</h4>
+                  <p id="explanationText">Run audit to view explanation.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
