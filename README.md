@@ -5,7 +5,6 @@
 
 <br/>
 
-[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-fairlens--india.run.app-0ea5e9?style=for-the-badge&logoColor=white)](https://fairlens-india.run.app)
 [![Google Solution Challenge](https://img.shields.io/badge/Google_Solution_Challenge-2026-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://hack2skill.com)
 [![Track](https://img.shields.io/badge/Track-Unbiased_AI_Decision-818cf8?style=for-the-badge&logoColor=white)](https://hack2skill.com)
 [![Status](https://img.shields.io/badge/Status-In_Development-yellow?style=for-the-badge&logoColor=black)](#-development-status)
@@ -112,9 +111,7 @@ A woman from rural Karnataka — same income, same credit score as an urban man 
 
 ---
 
-## 🚀 Live Demo
 
-> **[fairlens-india.run.app](https://fairlens-india.run.app)** — Upload any sklearn model and dataset. Audit complete in 3 minutes.
 
 ### What the Demo Shows (Real Numbers)
 
@@ -521,7 +518,6 @@ MIT License — Free to use, modify, and distribute. See [LICENSE](LICENSE).
 
 **Built with ❤️ for fair AI in India**
 
-[![Live Demo](https://img.shields.io/badge/Try_FairLens_India_Now-fairlens--india.run.app-0ea5e9?style=for-the-badge)](https://fairlens-india.run.app)
 
 *Google Solution Challenge 2026 · Team FairLens*
 
