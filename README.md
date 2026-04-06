@@ -5,6 +5,7 @@
 
 <br/>
 
+[![Local Demo](https://img.shields.io/badge/🌐_Local_Demo-http%3A%2F%2Flocalhost%3A8000-0ea5e9?style=for-the-badge&logoColor=white)](http://localhost:8000)
 [![Google Solution Challenge](https://img.shields.io/badge/Google_Solution_Challenge-2026-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://hack2skill.com)
 [![Track](https://img.shields.io/badge/Track-Unbiased_AI_Decision-818cf8?style=for-the-badge&logoColor=white)](https://hack2skill.com)
 [![Status](https://img.shields.io/badge/Status-In_Development-yellow?style=for-the-badge&logoColor=black)](#-development-status)
@@ -13,7 +14,7 @@
 <br/>
 
 [![Gemini](https://img.shields.io/badge/Gemini_2.0_Flash-AI_Core-4285F4?style=flat-square&logo=google&logoColor=white)](https://ai.google.dev)
-[![Cloud Run](https://img.shields.io/badge/Cloud_Run-Deployed-34A853?style=flat-square&logo=googlecloud&logoColor=white)](https://cloud.google.com/run)
+[![Deployment](https://img.shields.io/badge/Deployment-Local_First-yellow?style=flat-square&logoColor=black)](#-quickstart)
 [![Firebase](https://img.shields.io/badge/Firebase-Firestore-FBBC04?style=flat-square&logo=firebase&logoColor=black)](https://firebase.google.com)
 [![React](https://img.shields.io/badge/React-Frontend-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
 [![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
@@ -79,6 +80,68 @@ A woman from rural Karnataka — same income, same credit score as an urban man 
 - 🔄 Expanded visual analytics and richer report interactions
 - 🔄 Deployment/documentation polish for final hackathon demo package
 
+### 🔐 Easiest Auth Setup (Recommended for Hackathon Demo)
+
+Use simple backend API key protection with one env var:
+
+- Set `FAIRLENS_API_KEY` as an environment variable where backend runs.
+- Backend auto-protects `POST /audit`, `POST /correct`, and `POST /report`.
+- Send header `x-api-key: <your-key>` from frontend.
+- In this repo UI, use the **Set API Key** button in topbar once; key is stored locally in browser.
+
+Local example (PowerShell):
+
+```bash
+$env:FAIRLENS_API_KEY = "your-strong-key"
+python -m backend.main
+```
+
+### 🔐 Firebase Auth Setup (Google-native)
+
+If you want Google-first auth for judging narrative, enable Firebase Authentication and send Firebase ID token as a Bearer token.
+
+- The landing page has a **Firebase Auth** setup card with:
+  - **Set Firebase Config**
+  - **Google sign-in**
+  - **Sign out**
+- Backend accepts `Authorization: Bearer <firebase-id-token>`.
+- Keep `FAIRLENS_API_KEY` as fallback for quick demo recovery.
+- To force Firebase-only behavior, set `FIREBASE_AUTH_REQUIRED=true`.
+
+Frontend config needed from Firebase web app:
+
+- `apiKey`
+- `authDomain`
+- `projectId`
+- `appId`
+
+Required backend env vars for Firebase Admin verification:
+
+- FIREBASE_PROJECT_ID
+- FIREBASE_CLIENT_EMAIL
+- FIREBASE_PRIVATE_KEY
+
+Local backend example (PowerShell):
+
+```bash
+$env:FIREBASE_AUTH_REQUIRED = "true"
+$env:FIREBASE_PROJECT_ID = "your-project-id"
+$env:FIREBASE_CLIENT_EMAIL = "your-service-account-email"
+# set FIREBASE_PRIVATE_KEY in env or via .env before starting backend
+python -m backend.main
+```
+
+Set `FIREBASE_PRIVATE_KEY` in your local environment (or `.env`) before starting backend.
+
+Open the app, click **Set Firebase Config**, paste the web config JSON, then click **Google sign-in**.
+
+Useful console links:
+
+- Firebase Console: https://console.firebase.google.com/
+- Authentication setup: https://console.firebase.google.com/project/_/authentication/providers
+- Service accounts: https://console.firebase.google.com/project/_/settings/serviceaccounts/adminsdk
+- Secret Manager: https://console.cloud.google.com/security/secret-manager
+
 ---
 
 ## ✨ What Makes FairLens India Unique
@@ -111,7 +174,10 @@ A woman from rural Karnataka — same income, same credit score as an urban man 
 
 ---
 
+## 🚀 Demo Access
 
+> **Local frontend:** http://localhost:8000  
+> **Local backend health:** http://localhost:8080/health
 
 ### What the Demo Shows (Real Numbers)
 
@@ -147,7 +213,8 @@ AFTER FAIRLENS CORRECTION:
 │                               │ REST API calls                          │
 │  ┌────────────────────────────▼─────────────────────────────────────┐  │
 │  │                   FastAPI Backend (Python)                        │  │
-│  │   POST /audit   GET /metrics   POST /correct   GET /report       │  │
+│  │   GET /health  GET /counter  POST /audit  POST /correct          │  │
+│  │   GET /report  POST /report                                        │  │
 │  └────────────────────────────┬─────────────────────────────────────┘  │
 │                               │ triggers                                │
 │  ┌────────────────────────────▼─────────────────────────────────────┐  │
@@ -163,7 +230,7 @@ AFTER FAIRLENS CORRECTION:
 │  └──────┘     └─────────┘    └────────┘    └─────────────────────┘   │
 │                                                                         │
 │  ┌─────────────────────────────────────────────────────────────────┐   │
-│  │              Google Cloud Run (asia-south1 · Mumbai)             │   │
+│  │         Local Runtime (frontend :8000, backend :8080)          │   │
 │  └─────────────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
@@ -322,9 +389,8 @@ Developer opens FairLens India (React UI)
 | Service | Purpose |
 |---------|---------|
 | **Gemini 2.0 Flash** | Plain English bias explanation |
-| **Google Cloud Run** | Serverless deployment · Mumbai (asia-south1) |
+| **Local Runtime** | Frontend on :8000 and backend on :8080 |
 | **Firebase Firestore** | Real-time audit counter + history |
-| **Google Artifact Registry** | Docker image storage |
 | **Vertex AI** | Model hosting (optional) |
 
 ---
@@ -368,7 +434,7 @@ fairlens-india/
 │       └── firebase_handler.py    ← Firestore counter
 │
 ├── docker-compose.yml             ← Local dev (frontend + backend)
-├── Dockerfile.backend             ← Cloud Run deployment
+├── Dockerfile.backend             ← Optional containerization
 ├── .github/workflows/
 │   └── deploy.yml                 ← Auto-deploy on push
 └── requirements.txt
@@ -382,6 +448,16 @@ fairlens-india/
 
 ```bash
 # from repo root
+python -m pip install --upgrade pip setuptools wheel
+python -m pip install -r requirements.txt
+
+# Python 3.14 note (if fairlearn is needed):
+# python -m pip install --no-deps fairlearn
+
+# optional: choose report output directory
+# Windows (PowerShell): $env:FAIRLENS_REPORT_DIR = "C:\\temp\\fairlens-reports"
+# macOS/Linux (bash): export FAIRLENS_REPORT_DIR=/tmp/fairlens-reports
+
 python -m uvicorn backend.main:app --host 0.0.0.0 --port 8080 --reload
 ```
 
@@ -399,11 +475,11 @@ git clone https://github.com/Yashaswini-V21/fairlens-india
 cd fairlens-india
 
 # Backend
-cd backend
 pip install -r requirements.txt
-cp .env.template .env
+# Optional if present in your branch:
+# cp .env.template .env
 # Add: GEMINI_API_KEY, Firebase credentials
-uvicorn main:app --reload --port 8000
+python -m uvicorn backend.main:app --reload --port 8000
 
 # Frontend (new terminal)
 cd frontend
@@ -415,6 +491,94 @@ Open **http://localhost:5173** → Upload any sklearn model → Audit complete.
 
 ### Get Your Free Gemini API Key
 Go to **[aistudio.google.com](https://aistudio.google.com)** → Sign in → Create API key → Copy. No credit card. Instant. 15 req/min free.
+
+---
+
+## ⚡ API Quick Test (Judge Friendly)
+
+Use this section to validate the backend quickly without opening the UI.
+
+### One-command smoke test (recommended)
+
+```bash
+python scripts/smoke_test.py --base-url http://localhost:8080
+```
+
+This command auto-generates:
+- `samples/sample_model.pkl`
+- `samples/sample_dataset.csv`
+
+Then it runs `/health`, `/audit`, and `/correct` and prints `SMOKE TEST PASSED` when successful.
+
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| `/health` | GET | Service health check |
+| `/counter` | GET | Audits counter (Firestore/local fallback) |
+| `/audit` | POST | Full detect → explain → correct → report pipeline |
+| `/correct` | POST | Fairness correction only |
+| `/report` | GET | Report usage guidance |
+| `/report` | POST | Generate PDF from payload |
+
+### 1) Health check
+
+```bash
+curl http://localhost:8080/health
+```
+
+Expected response:
+
+```json
+{
+  "status": "ok",
+  "service": "fairlens-india"
+}
+```
+
+### 2) Run full audit
+
+```bash
+curl -X POST "http://localhost:8080/audit" \
+  -F "model_file=@sample_model.pkl" \
+  -F "dataset_file=@sample_dataset.csv" \
+  -F "sensitive_cols=gender,location" \
+  -F "fairness_threshold=0.10"
+```
+
+Expected keys in response:
+
+```json
+{
+  "status": "done",
+  "sensitive_cols": ["..."],
+  "bias_flags": {"...": "..."},
+  "shap_results": {"...": "..."},
+  "fairness_metrics": {"...": "..."},
+  "gemini_explanation": "...",
+  "correction_results": {"...": "..."},
+  "report_path": "...pdf"
+}
+```
+
+### 3) Run correction only
+
+```bash
+curl -X POST "http://localhost:8080/correct" \
+  -F "model_file=@sample_model.pkl" \
+  -F "dataset_file=@sample_dataset.csv" \
+  -F "sensitive_feature=gender"
+```
+
+Expected keys in response:
+
+```json
+{
+  "before_metrics": {"...": "..."},
+  "after_metrics": {"...": "..."},
+  "accuracy_before": 0.0,
+  "accuracy_after": 0.0,
+  "fairness_improvement_pct": 0.0
+}
+```
 
 ---
 
@@ -472,6 +636,17 @@ audit_app = workflow.compile()
 
 ---
 
+## 🧪 Benchmark Snapshot (Hackathon Baseline)
+
+| Item | Baseline |
+|------|----------|
+| **Audit runtime (end-to-end)** | 45-120 sec (typical), up to 180 sec with SHAP fallback |
+| **Supported model types** | sklearn-compatible estimators with `predict()` (best with tree models) |
+| **Recommended max dataset size** | 25 MB CSV for smooth hackathon demos |
+| **Known limitations** | Single sensitive feature used for correction pass; fairness metrics depend on clean binary/label columns; SHAP fallback is approximate |
+
+---
+
 ## 🌍 Impact
 
 ```
@@ -518,6 +693,7 @@ MIT License — Free to use, modify, and distribute. See [LICENSE](LICENSE).
 
 **Built with ❤️ for fair AI in India**
 
+[![Local Demo](https://img.shields.io/badge/Try_FairLens_India_Local-http%3A%2F%2Flocalhost%3A8000-0ea5e9?style=for-the-badge)](http://localhost:8000)
 
 *Google Solution Challenge 2026 · Team FairLens*
 

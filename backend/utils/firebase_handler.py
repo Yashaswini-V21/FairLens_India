@@ -6,9 +6,10 @@ from typing import Any, Optional
 
 try:
     import firebase_admin
-    from firebase_admin import credentials, firestore
+    from firebase_admin import auth, credentials, firestore
 except ImportError:  # pragma: no cover - optional dependency during bootstrap
     firebase_admin = None
+    auth = None
     credentials = None
     firestore = None
 
@@ -34,6 +35,18 @@ def init_firebase() -> Any:
         }
         firebase_admin.initialize_app(credentials.Certificate(cred_dict))
     return firestore.client()
+
+
+def verify_id_token(id_token: str) -> Optional[dict]:
+    token = (id_token or "").strip()
+    if not token or firebase_admin is None or auth is None:
+        return None
+    try:
+        if not firebase_admin._apps:
+            init_firebase()
+        return auth.verify_id_token(token)
+    except Exception:
+        return None
 
 
 def increment_counter(db: Any) -> None:

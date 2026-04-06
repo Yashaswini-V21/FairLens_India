@@ -4,7 +4,7 @@ from typing import Any, List, Optional, TypedDict
 
 import pandas as pd
 
-from ..engine import bias_detector, gemini_explainer, model_corrector
+from ..engine import bias_detector, fairness_scorer, gemini_explainer, model_corrector
 from ..utils import firebase_handler, report_generator
 
 try:
@@ -58,12 +58,24 @@ def detect_bias_node(state: AuditState) -> AuditState:
     sensitive_cols = state.get("sensitive_cols") or bias_detector.auto_detect_sensitive_cols(frame)
     shap_results = bias_detector.compute_shap_values(model, frame)
     bias_flags = bias_detector.detect_sensitive_bias(shap_results, sensitive_cols, threshold=state.get("fairness_threshold", 0.10))
-    fairness_metrics = {
-        "bias_flags": bias_flags,
-        "demographic_parity_difference": max(bias_flags.get("contributions", {}).values(), default=0.0),
-        "equalized_odds_difference": max(bias_flags.get("contributions", {}).values(), default=0.0),
-        "equal_opportunity_difference": max(bias_flags.get("contributions", {}).values(), default=0.0),
-    }
+    if sensitive_cols:
+        fairness_metrics = fairness_scorer.compute_fairness_metrics(
+            model,
+            frame,
+            y_true,
+            sensitive_cols[0],
+        )
+    else:
+        fairness_metrics = {
+            "demographic_parity_difference": 0.0,
+            "equalized_odds_difference": 0.0,
+            "equal_opportunity_difference": 0.0,
+            "selection_rate_by_group": {},
+            "best_group": None,
+            "worst_group": None,
+            "disparity_ratio": 1.0,
+        }
+    fairness_metrics["bias_flags"] = bias_flags
     state.update(
         {
             "shap_results": shap_results,

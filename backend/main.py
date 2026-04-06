@@ -4,14 +4,15 @@ import os
 import shutil
 import tempfile
 from pathlib import Path
+from typing import Optional
 
 import pandas as pd
-from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.agents.audit_agent import audit_app, AuditState
 from backend.engine import bias_detector, fairness_scorer, gemini_explainer, model_corrector
-from backend.utils.firebase_handler import get_count, init_firebase
+from backend.utils.firebase_handler import get_count, init_firebase, verify_id_token
 from backend.utils.report_generator import generate_pdf
 
 
@@ -23,6 +24,32 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+def _is_truthy(value: str) -> bool:
+    return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
+def require_api_key(
+    x_api_key: Optional[str] = Header(default=None),
+    authorization: Optional[str] = Header(default=None),
+) -> None:
+    expected_api_key = os.environ.get("FAIRLENS_API_KEY", "").strip()
+    firebase_required = _is_truthy(os.environ.get("FIREBASE_AUTH_REQUIRED", "false"))
+
+    bearer_token = ""
+    if authorization and authorization.lower().startswith("bearer "):
+        bearer_token = authorization[7:].strip()
+    decoded = verify_id_token(bearer_token)
+    if decoded is not None:
+        return
+
+    if not expected_api_key:
+        if firebase_required:
+            raise HTTPException(status_code=401, detail="Unauthorized")
+        return
+    if x_api_key != expected_api_key:
+        raise HTTPException(status_code=401, detail="Unauthorized")
 
 
 @app.get("/health")
@@ -38,6 +65,7 @@ def counter() -> dict:
 
 @app.post("/audit")
 async def audit(
+    _: None = Depends(require_api_key),
     model_file: UploadFile = File(...),
     dataset_file: UploadFile = File(...),
     sensitive_cols: str = Form(""),
@@ -80,6 +108,7 @@ async def audit(
         target,
         sensitive_feature=selected_sensitive[0] if selected_sensitive else dataset.columns[0],
     )
+    correction.pop("corrected_model", None)
     state: AuditState = {
         "model_path": model_path,
         "dataset_path": dataset_path,
@@ -110,6 +139,7 @@ async def audit(
 
 @app.post("/correct")
 async def correct(
+    _: None = Depends(require_api_key),
     model_file: UploadFile = File(...),
     dataset_file: UploadFile = File(...),
     sensitive_feature: str = Form(...),
@@ -119,6 +149,7 @@ async def correct(
     model = bias_detector.load_model(model_path)
     target = _split_features_target(dataset)[1]
     results = model_corrector.correct_model(model, dataset, target, sensitive_feature=sensitive_feature)
+    results.pop("corrected_model", None)
     return results
 
 
@@ -128,7 +159,7 @@ def report() -> dict:
 
 
 @app.post("/report")
-def generate_report_endpoint(payload: dict) -> dict:
+def generate_report_endpoint(payload: dict, _: None = Depends(require_api_key)) -> dict:
     report_path = generate_pdf(payload)
     return {"report_path": report_path}
 

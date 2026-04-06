@@ -26,6 +26,13 @@ const auditTabs = Array.from(document.querySelectorAll('.audit-tab'));
 const auditPanelInput = document.getElementById('auditPanelInput');
 const auditPanelMetrics = document.getElementById('auditPanelMetrics');
 const auditPanelExplain = document.getElementById('auditPanelExplain');
+const auditPanelCorrect = document.getElementById('auditPanelCorrect');
+const accuracyBeforeValue = document.getElementById('accuracyBeforeValue');
+const accuracyAfterValue = document.getElementById('accuracyAfterValue');
+const improvementValue = document.getElementById('improvementValue');
+const reportPathText = document.getElementById('reportPathText');
+const useDemoPresetBtn = document.getElementById('useDemoPresetBtn');
+const apiConnectionStatus = document.getElementById('apiConnectionStatus');
 
 const csvSensitiveHints = ['gender', 'sex', 'caste', 'religion', 'age', 'disability', 'region', 'state', 'language'];
 
@@ -55,7 +62,8 @@ const setActiveAuditTab = (tabKey) => {
   const tabToPanel = {
     input: auditPanelInput,
     metrics: auditPanelMetrics,
-    explain: auditPanelExplain
+    explain: auditPanelExplain,
+    correct: auditPanelCorrect
   };
 
   auditTabs.forEach((tab) => {
@@ -136,6 +144,13 @@ const formatMetric = (value) => {
   return value.toFixed(3);
 };
 
+const formatPercent = (value) => {
+  if (typeof value !== 'number' || Number.isNaN(value)) {
+    return '-';
+  }
+  return `${value.toFixed(1)}%`;
+};
+
 const parseCsvHeader = (line) => {
   const headers = [];
   let current = '';
@@ -179,11 +194,21 @@ const showAuditResults = (data) => {
   }
 
   const metrics = data?.fairness_metrics || {};
-  dpValue.textContent = formatMetric(metrics.demographic_parity);
-  eoValue.textContent = formatMetric(metrics.equalized_odds);
-  eopValue.textContent = formatMetric(metrics.equal_opportunity);
+  dpValue.textContent = formatMetric(
+    metrics.demographic_parity_difference ?? metrics.demographic_parity
+  );
+  eoValue.textContent = formatMetric(
+    metrics.equalized_odds_difference ?? metrics.equalized_odds
+  );
+  eopValue.textContent = formatMetric(
+    metrics.equal_opportunity_difference ?? metrics.equal_opportunity
+  );
 
-  const flags = Array.isArray(data?.bias_flags) ? data.bias_flags : [];
+  const flags = Array.isArray(data?.bias_flags?.flags)
+    ? data.bias_flags.flags
+    : Array.isArray(data?.bias_flags)
+      ? data.bias_flags
+      : [];
   biasFlagsList.innerHTML = '';
 
   if (!flags.length) {
@@ -203,7 +228,46 @@ const showAuditResults = (data) => {
       ? data.gemini_explanation
       : 'Explanation is unavailable for this run.';
 
+  const correction = data?.correction_results || {};
+  accuracyBeforeValue.textContent = formatMetric(correction.accuracy_before);
+  accuracyAfterValue.textContent = formatMetric(correction.accuracy_after);
+  improvementValue.textContent = formatPercent(correction.fairness_improvement_pct);
+  reportPathText.textContent =
+    typeof data?.report_path === 'string' && data.report_path.trim().length
+      ? data.report_path
+      : 'No report path returned from backend.';
+
   auditResults.hidden = false;
+};
+
+const setSuggestedSensitiveCols = (tokens = csvSensitiveHints) => {
+  if (!sensitiveColsSelect) {
+    return;
+  }
+
+  const options = Array.from(sensitiveColsSelect.options);
+  options.forEach((option) => {
+    const normalized = option.value.toLowerCase();
+    option.selected = tokens.some((token) => normalized.includes(token));
+  });
+};
+
+const checkApiHealth = async () => {
+  if (!apiConnectionStatus) {
+    return;
+  }
+
+  try {
+    const response = await fetch('http://localhost:8080/health');
+    if (!response.ok) {
+      throw new Error(String(response.status));
+    }
+    apiConnectionStatus.textContent = 'API: connected on localhost:8080';
+    apiConnectionStatus.dataset.state = 'ok';
+  } catch (error) {
+    apiConnectionStatus.textContent = 'API: offline (start backend on :8080)';
+    apiConnectionStatus.dataset.state = 'error';
+  }
 };
 
 if (fairnessThreshold && thresholdValue) {
@@ -239,6 +303,8 @@ if (datasetFileInput && sensitiveColsSelect) {
         sensitiveColsSelect.appendChild(option);
       });
 
+      setSuggestedSensitiveCols();
+
       if (!headers.length) {
         setAuditStatus('CSV header could not be parsed. Check file format.', 'error');
       } else {
@@ -247,6 +313,15 @@ if (datasetFileInput && sensitiveColsSelect) {
     } catch (error) {
       setAuditStatus('Unable to read the CSV file.', 'error');
     }
+  });
+}
+
+if (useDemoPresetBtn) {
+  useDemoPresetBtn.addEventListener('click', () => {
+    setSuggestedSensitiveCols(['gender', 'location', 'age', 'region']);
+    fairnessThreshold.value = '0.10';
+    thresholdValue.textContent = '0.10';
+    setAuditStatus('Demo preset applied. Upload demo model and demo CSV, then run audit.');
   });
 }
 
@@ -318,3 +393,5 @@ if ('IntersectionObserver' in window) {
 } else {
   revealItems.forEach((item) => item.classList.add('visible'));
 }
+
+checkApiHealth();

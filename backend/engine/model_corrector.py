@@ -47,19 +47,23 @@ def correct_model(
     y_series = _to_series(y, index=frame.index)
     sensitive = frame[sensitive_feature] if isinstance(sensitive_feature, str) and sensitive_feature in frame.columns else _to_series(sensitive_feature, index=frame.index)
     features = frame.drop(columns=[sensitive_feature], errors="ignore")
+    model_features = _select_model_features(model, frame, features)
 
-    before_metrics = compute_fairness_metrics(model, features, y_series, sensitive)
-    before_accuracy = _accuracy_or_none(model, features, y_series)
+    before_metrics = compute_fairness_metrics(model, model_features, y_series, sensitive)
+    before_accuracy = _accuracy_or_none(model, model_features, y_series)
 
     constraint_obj = _constraint_from_name(constraint)
     if ExponentiatedGradient is None or constraint_obj is None:
-        corrected_model = _fallback_corrected_model(model, features, y_series)
+        corrected_model = _fallback_corrected_model(model, model_features, y_series)
     else:
-        corrected_model = ExponentiatedGradient(_base_estimator(model), constraints=constraint_obj)
-        corrected_model.fit(features, y_series, sensitive_features=sensitive)
+        try:
+            corrected_model = ExponentiatedGradient(_base_estimator(model), constraints=constraint_obj)
+            corrected_model.fit(model_features, y_series, sensitive_features=sensitive)
+        except Exception:
+            corrected_model = _fallback_corrected_model(model, model_features, y_series)
 
-    after_predictions = _predict(corrected_model, features)
-    after_metrics = compute_fairness_metrics(_PredictionWrapper(after_predictions), features, y_series, sensitive)
+    after_predictions = _predict(corrected_model, model_features)
+    after_metrics = compute_fairness_metrics(_PredictionWrapper(after_predictions), model_features, y_series, sensitive)
     after_accuracy = float((np.asarray(after_predictions) == np.asarray(y_series)).mean())
 
     before_dp = abs(float(before_metrics.get("demographic_parity_difference", 0.0)))
@@ -80,6 +84,14 @@ def _predict(model: Any, X: pd.DataFrame) -> np.ndarray:
     if hasattr(model, "predict"):
         return np.asarray(model.predict(X))
     raise AttributeError("Corrected model must provide predict().")
+
+
+def _select_model_features(model: Any, full_frame: pd.DataFrame, dropped_frame: pd.DataFrame) -> pd.DataFrame:
+    try:
+        _predict(model, dropped_frame)
+        return dropped_frame
+    except Exception:
+        return full_frame
 
 
 def _accuracy_or_none(model: Any, X: pd.DataFrame, y: pd.Series) -> float:

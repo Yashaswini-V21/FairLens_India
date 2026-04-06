@@ -87,7 +87,7 @@ def compute_fairness_metrics(model: Any, X: pd.DataFrame, y_true: Iterable[Any],
         worst_group = str(group_rates.idxmin())
         max_rate = float(group_rates.max())
         min_rate = float(group_rates.min())
-        disparity_ratio = float(max_rate / min_rate) if min_rate else float("inf")
+        disparity_ratio = float(max_rate / min_rate) if min_rate else 9999.0
     else:
         best_group = None
         worst_group = None
