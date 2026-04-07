@@ -568,7 +568,7 @@ const updateAuthUI = () => {
   const token = readStoredAuthToken();
   const email = localStorage.getItem('fairlens-auth-email');
   const loggedIn = Boolean(token && email);
-  const isDemoIdentity = typeof email === 'string' && email.toLowerCase().includes('demo@fairlens.ai');
+  const isDemoIdentity = typeof email === 'string' && email.toLowerCase().includes('demo.user@fairlens.dev');
 
   [openAuditTop, openAuditHero, openAuditFooter].forEach((btn) => {
     if (!btn) {

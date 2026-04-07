@@ -1,16 +1,16 @@
 const defaultFirebaseConfig = {
-  apiKey: "AIzaSyBCogYd49Y5_f6FXJ04xOm3u8tjaz1cfSg",
-  authDomain: "fairlensindia.firebaseapp.com",
-  projectId: "fairlensindia",
-  storageBucket: "fairlensindia.firebasestorage.app",
-  messagingSenderId: "196582323392",
-  appId: "1:196582323392:web:0759ed647fb052e0fa2925",
-  measurementId: "G-0WGR1WP920"
+  apiKey: "",
+  authDomain: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: "",
+  measurementId: ""
 };
 
 const localUsersStorageKey = "fairlens-local-users";
-const demoUserEmail = "demo@fairlens.ai";
-const demoUserPassword = "FairLens@123";
+const demoUserEmail = "demo.user@fairlens.dev";
+const demoAccessCode = String(window.FAIRLENS_DEMO_ACCESS_CODE || "demo-access");
 
 const authMode = document.body.dataset.authMode === "signup" ? "signup" : "login";
 const emailInput = document.getElementById("authEmail");
@@ -50,13 +50,13 @@ const ensureDemoUser = () => {
     users[index] = {
       ...users[index],
       email: demoUserEmail,
-      password: demoUserPassword,
+      password: demoAccessCode,
       source: "seeded-demo",
     };
   } else {
     users.push({
       email: demoUserEmail,
-      password: demoUserPassword,
+      password: demoAccessCode,
       source: "seeded-demo",
     });
   }
@@ -112,7 +112,7 @@ const createLocalUser = (email, password) => {
 const verifyLocalUser = (email, password) => {
   const normalizedEmail = String(email || "").trim().toLowerCase();
 
-  if (normalizedEmail === demoUserEmail && String(password || "") === demoUserPassword) {
+  if (normalizedEmail === demoUserEmail && String(password || "") === demoAccessCode) {
     return true;
   }
 
@@ -189,7 +189,7 @@ const runLocalCredentialFlow = ({ mode, email, password }) => {
   if (!valid) {
     return {
       ok: false,
-      message: `Invalid credentials. Demo user: ${demoUserEmail} / ${demoUserPassword}`,
+      message: "Invalid credentials for this device.",
       tone: "error",
     };
   }
@@ -210,7 +210,7 @@ const goToHome = () => {
 ensureDemoUser();
 
 if (authMode === "login") {
-  setStatus(`Demo login: ${demoUserEmail} / ${demoUserPassword}`);
+  setStatus("Demo mode is enabled for local testing.");
 }
 
 if (googleBtn && auth) {

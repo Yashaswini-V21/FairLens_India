@@ -392,7 +392,7 @@ http://127.0.0.1:5500/index.html
 
 ### Demo access
 
-- Demo login works with `demo@fairlens.ai` / `FairLens@123`.
+- Demo login is available in local mode using credentials configured in your local auth setup.
 - If Firebase is unavailable, the UI falls back to local browser auth storage.
 - Use the sample files in `samples/` or `Public/demo/` for a quick run.
 
