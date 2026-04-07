@@ -16,7 +16,7 @@
 [![Gemini](https://img.shields.io/badge/Gemini_2.0_Flash-AI_Core-4285F4?style=flat-square&logo=google&logoColor=white)](https://ai.google.dev)
 [![Deployment](https://img.shields.io/badge/Deployment-Local_First-yellow?style=flat-square&logoColor=black)](#-quickstart)
 [![Firebase](https://img.shields.io/badge/Firebase-Firestore-FBBC04?style=flat-square&logo=firebase&logoColor=black)](https://firebase.google.com)
-[![React](https://img.shields.io/badge/React-Frontend-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
+[![Frontend](https://img.shields.io/badge/HTML%2FCSS%2FJS-Frontend-61DAFB?style=flat-square&logoColor=black)](#-tech-stack)
 [![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![LangGraph](https://img.shields.io/badge/LangGraph-Agent-c084fc?style=flat-square&logoColor=white)](https://langgraph.io)
 [![SHAP](https://img.shields.io/badge/SHAP-Explainability-ef4444?style=flat-square&logoColor=white)](https://shap.readthedocs.io)
@@ -64,83 +64,25 @@ A woman from rural Karnataka — same income, same credit score as an urban man 
 
 ## 🚧 Development Status
 
-> FairLens India is a **hackathon project under active development**.
-> The README reflects the **full target vision** for final submission.
+FairLens India is now a working fairness-audit demo with a polished landing page, auth gate, audit modal, local fallback auth, and end-to-end fairness reporting.
 
-### Current Build (what is live in this repo now)
+### What is implemented now
 
-- ✅ FastAPI backend with working `/health`, `/counter`, `/audit`, `/correct`, `/report`
-- ✅ Fairness core modules connected: SHAP, Fairlearn scoring/correction, report generation
-- ✅ Modern static landing page with splash screen + interactive Audit modal flow
-- ✅ Audit popup supports model/dataset upload and fairness result rendering
+- ✅ Auth-state UI with login, sign up, logout, and demo-user support
+- ✅ Loading states, audit spinner, API health indicator, and submit guardrails
+- ✅ File validation for model and dataset upload
+- ✅ Top bias findings with confidence badges and explainability output
+- ✅ Before/after fairness meters and correction suggestions
+- ✅ Export flow for report download and JSON output
+- ✅ Redesigned landing page, footer, and contact links
+- ✅ Firebase auth fallback to local credentials when web config is unavailable
 
-### In Progress (what we are actively building next)
+### Current behavior
 
-- 🔄 Advanced React/Vite product frontend layer for full multi-tab experience
-- 🔄 Expanded visual analytics and richer report interactions
-- 🔄 Deployment/documentation polish for final hackathon demo package
-
-### 🔐 Easiest Auth Setup (Recommended for Hackathon Demo)
-
-Use simple backend API key protection with one env var:
-
-- Set `FAIRLENS_API_KEY` as an environment variable where backend runs.
-- Backend auto-protects `POST /audit`, `POST /correct`, and `POST /report`.
-- Send header `x-api-key: <your-key>` from frontend.
-- In this repo UI, use the **Set API Key** button in topbar once; key is stored locally in browser.
-
-Local example (PowerShell):
-
-```bash
-$env:FAIRLENS_API_KEY = "your-strong-key"
-python -m backend.main
-```
-
-### 🔐 Firebase Auth Setup (Google-native)
-
-If you want Google-first auth for judging narrative, enable Firebase Authentication and send Firebase ID token as a Bearer token.
-
-- The landing page has a **Firebase Auth** setup card with:
-  - **Set Firebase Config**
-  - **Google sign-in**
-  - **Sign out**
-- Backend accepts `Authorization: Bearer <firebase-id-token>`.
-- Keep `FAIRLENS_API_KEY` as fallback for quick demo recovery.
-- To force Firebase-only behavior, set `FIREBASE_AUTH_REQUIRED=true`.
-
-Frontend config needed from Firebase web app:
-
-- `apiKey`
-- `authDomain`
-- `projectId`
-- `appId`
-
-Required backend env vars for Firebase Admin verification:
-
-- FIREBASE_PROJECT_ID
-- FIREBASE_CLIENT_EMAIL
-- FIREBASE_PRIVATE_KEY
-
-Local backend example (PowerShell):
-
-```bash
-$env:FIREBASE_AUTH_REQUIRED = "true"
-$env:FIREBASE_PROJECT_ID = "your-project-id"
-$env:FIREBASE_CLIENT_EMAIL = "your-service-account-email"
-# set FIREBASE_PRIVATE_KEY in env or via .env before starting backend
-python -m backend.main
-```
-
-Set `FIREBASE_PRIVATE_KEY` in your local environment (or `.env`) before starting backend.
-
-Open the app, click **Set Firebase Config**, paste the web config JSON, then click **Google sign-in**.
-
-Useful console links:
-
-- Firebase Console: https://console.firebase.google.com/
-- Authentication setup: https://console.firebase.google.com/project/_/authentication/providers
-- Service accounts: https://console.firebase.google.com/project/_/settings/serviceaccounts/adminsdk
-- Secret Manager: https://console.cloud.google.com/security/secret-manager
+- The app serves a static landing page from `index.html`.
+- The audit flow runs through `script-v2.js` and a FastAPI backend in `backend/main.py`.
+- Authentication can use Firebase or local browser storage, depending on the runtime config.
+- When Firebase fails or is unavailable, the app falls back to local credentials so the demo still works.
 
 ---
 
@@ -348,56 +290,42 @@ Developer opens FairLens India (React UI)
 
 ## 🔧 Tech Stack
 
-> Note: This section includes both **current implementation** and **target hackathon stack**.
+The stack below reflects the code that is actually in this repository today.
 
 ### Frontend
 
-#### Current implementation in this repository
-
 | Technology | Purpose |
 |-----------|---------|
-| **HTML5** | Landing + audit popup UI |
-| **CSS3** | Design system, animations, responsive layout |
-| **Vanilla JavaScript** | Modal logic, audit form flow, API integration |
-
-#### Target stack for final hackathon build
-
-| Technology | Version | Purpose |
-|-----------|---------|---------|
-| **React** | 18.x | Component-based UI architecture |
-| **Vite** | 5.x | Build tool + dev server |
-| **Recharts** | 2.x | Interactive SHAP + fairness charts |
-| **Axios** | 1.x | API calls to FastAPI backend |
-| **TailwindCSS** | 3.x | Utility-first styling |
-| **Framer Motion** | 10.x | Smooth tab transitions + animations |
+| **HTML5** | Landing page, auth gate, and audit modal markup |
+| **CSS3** | Responsive design system, layout, motion, theme styles |
+| **Vanilla JavaScript** | Auth state, file validation, audit orchestration, UI updates |
+| **Firebase Auth Compat SDK** | Optional Google auth integration |
 
 ### Backend
 
-| Technology | Version | Purpose |
-|-----------|---------|---------|
-| **FastAPI** | 0.109 | REST API — /audit, /correct, /report |
-| **SHAP** | 0.44.1 | Feature importance + waterfall values |
-| **Fairlearn** | 0.10.0 | Bias metrics + ExponentiatedGradient |
-| **scikit-learn** | 1.4.0 | Model loading + prediction |
-| **LangGraph** | 0.0.30 | 5-node autonomous audit agent |
-| **google-generativeai** | 0.4.1 | Gemini 2.0 Flash API |
-| **ReportLab** | 4.1.0 | PDF audit report generation |
-| **joblib** | 1.3.2 | Model serialization (.pkl) |
+| Technology | Purpose |
+|-----------|---------|
+| **FastAPI** | REST API for health checks, audit, correction, and reporting |
+| **SHAP** | Feature attribution and bias signal analysis |
+| **Fairlearn** | Fairness scoring and correction logic |
+| **scikit-learn** | Model loading and prediction support |
+| **ReportLab** | PDF report generation |
+| **joblib** | `.pkl` model loading and serialization support |
+| **Google Generative AI** | LLM explanation layer used by the explainer module |
 
-### Google Cloud
+### Runtime and storage
 
-| Service | Purpose |
-|---------|---------|
-| **Gemini 2.0 Flash** | Plain English bias explanation |
-| **Local Runtime** | Frontend on :8000 and backend on :8080 |
-| **Firebase Firestore** | Real-time audit counter + history |
-| **Vertex AI** | Model hosting (optional) |
+| Technology | Purpose |
+|-----------|---------|
+| **localStorage** | Local auth fallback, demo users, lightweight session state |
+| **Browser print/export** | Print-friendly report output when exporting PDF |
+| **Python HTTP server / static hosting** | Serves the frontend during local demo runs |
 
 ---
 
 ## 📁 Project Structure
 
-> Current branch uses a flat static frontend (`index.html`, `styles.css`, `script.js`) plus `backend/`.
+> Current branch uses a flat static frontend (`index.html`, `styles-v2.css`, `script-v2.js`) plus `backend/`.
 > The structure below represents the target final architecture we are building toward.
 
 ```
@@ -443,142 +371,138 @@ fairlens-india/
 ---
 
 ## 🚀 Quickstart
+Use the setup steps below to start the backend and open the static frontend.
 
-### Quickstart (current repository state)
+### Local setup
 
 ```bash
 # from repo root
 python -m pip install --upgrade pip setuptools wheel
 python -m pip install -r requirements.txt
 
-# Python 3.14 note (if fairlearn is needed):
-# python -m pip install --no-deps fairlearn
-
-# optional: choose report output directory
-# Windows (PowerShell): $env:FAIRLENS_REPORT_DIR = "C:\\temp\\fairlens-reports"
-# macOS/Linux (bash): export FAIRLENS_REPORT_DIR=/tmp/fairlens-reports
-
+# start the backend
 python -m uvicorn backend.main:app --host 0.0.0.0 --port 8080 --reload
 ```
 
-Open frontend using your static server (for example VS Code Live Server):
+Open the landing page with any static server, for example VS Code Live Server:
 
 ```
 http://127.0.0.1:5500/index.html
 ```
 
-### Quickstart (target React/Vite setup - in progress)
+### Demo access
 
-```bash
-# Clone
-git clone https://github.com/Yashaswini-V21/fairlens-india
-cd fairlens-india
-
-# Backend
-pip install -r requirements.txt
-# Optional if present in your branch:
-# cp .env.template .env
-# Add: GEMINI_API_KEY, Firebase credentials
-python -m uvicorn backend.main:app --reload --port 8000
-
-# Frontend (new terminal)
-cd frontend
-npm install
-npm run dev
-```
-
-Open **http://localhost:5173** → Upload any sklearn model → Audit complete.
-
-### Get Your Free Gemini API Key
-Go to **[aistudio.google.com](https://aistudio.google.com)** → Sign in → Create API key → Copy. No credit card. Instant. 15 req/min free.
+- Demo login works with `demo@fairlens.ai` / `FairLens@123`.
+- If Firebase is unavailable, the UI falls back to local browser auth storage.
+- Use the sample files in `samples/` or `Public/demo/` for a quick run.
 
 ---
 
-## ⚡ API Quick Test (Judge Friendly)
+## ⚡ API Quick Test
 
-Use this section to validate the backend quickly without opening the UI.
-
-### One-command smoke test (recommended)
+Use this section to validate the backend without opening the full UI.
 
 ```bash
 python scripts/smoke_test.py --base-url http://localhost:8080
 ```
 
-This command auto-generates:
-- `samples/sample_model.pkl`
-- `samples/sample_dataset.csv`
-
-Then it runs `/health`, `/audit`, and `/correct` and prints `SMOKE TEST PASSED` when successful.
+Core endpoints:
 
 | Endpoint | Method | Purpose |
 |----------|--------|---------|
 | `/health` | GET | Service health check |
-| `/counter` | GET | Audits counter (Firestore/local fallback) |
+| `/counter` | GET | Audit counter fallback / live count |
 | `/audit` | POST | Full detect → explain → correct → report pipeline |
 | `/correct` | POST | Fairness correction only |
 | `/report` | GET | Report usage guidance |
-| `/report` | POST | Generate PDF from payload |
+| `/report` | POST | Generate report output |
 
-### 1) Health check
+---
 
-```bash
-curl http://localhost:8080/health
+## 🏗️ System Architecture
+
+```mermaid
+flowchart TB
+  U[User in browser] --> F[Static frontend\nindex.html + styles-v2.css + script-v2.js]
+  F --> A[Auth layer\nFirebase auth or local fallback]
+  F --> B[FastAPI backend\nbackend/main.py]
+  B --> C[Audit engine\nBias detector + fairness scorer]
+  C --> D[Explainability\nGemini explainer + SHAP]
+  C --> E[Correction\nFairlearn model corrector]
+  E --> R[Report generation\nPDF / JSON output]
+  R --> F
+  F --> H[Local storage / session state]
 ```
 
-Expected response:
+### Main components
 
-```json
-{
-  "status": "ok",
-  "service": "fairlens-india"
-}
+- **Frontend shell**: landing page, auth buttons, audit modal, export controls, and loading states.
+- **Auth layer**: Firebase when available, local browser credentials when Firebase is not usable.
+- **Backend API**: health, audit, correction, and reporting endpoints.
+- **ML pipeline**: SHAP analysis, fairness scoring, correction, and explanation generation.
+- **Report output**: browser-friendly report summary plus downloadable artifacts.
+
+---
+
+## 🔄 Data Flow
+
+```mermaid
+sequenceDiagram
+  participant User
+  participant UI as FairLens UI
+  participant API as FastAPI backend
+  participant Audit as Audit pipeline
+  participant ML as SHAP/Fairlearn/Gemini
+  participant Report as Report generator
+
+  User->>UI: Sign in or use demo credentials
+  User->>UI: Upload model + dataset
+  UI->>API: POST /audit
+  API->>Audit: Start audit job
+  Audit->>ML: Compute bias, metrics, explanation
+  ML-->>Audit: Findings + scores + narrative
+  Audit->>Report: Build report payload
+  Report-->>API: Report path / JSON
+  API-->>UI: Results, meters, findings, export data
+  UI-->>User: Show bias cards, fairness meters, exports
 ```
 
-### 2) Run full audit
+---
 
-```bash
-curl -X POST "http://localhost:8080/audit" \
-  -F "model_file=@sample_model.pkl" \
-  -F "dataset_file=@sample_dataset.csv" \
-  -F "sensitive_cols=gender,location" \
-  -F "fairness_threshold=0.10"
-```
+## 🔄 Workflow — How One Audit Runs
 
-Expected keys in response:
+1. The user signs in or uses the demo fallback login.
+2. The user uploads a model file and dataset, then selects sensitive columns.
+3. The frontend validates file type and size before sending the audit request.
+4. The backend runs the audit pipeline: detect, explain, score, and correct.
+5. The UI renders the top findings, confidence badges, and before/after fairness meters.
+6. The user exports the result as a report-friendly output for sharing or submission.
 
-```json
-{
-  "status": "done",
-  "sensitive_cols": ["..."],
-  "bias_flags": {"...": "..."},
-  "shap_results": {"...": "..."},
-  "fairness_metrics": {"...": "..."},
-  "gemini_explanation": "...",
-  "correction_results": {"...": "..."},
-  "report_path": "...pdf"
-}
-```
+### Pipeline stages
 
-### 3) Run correction only
+| Stage | What happens |
+|------|--------------|
+| **Upload** | Model and dataset are validated before audit starts |
+| **Detect** | SHAP-based feature influence and bias flags are computed |
+| **Score** | Fairlearn metrics evaluate parity and odds gaps |
+| **Explain** | The explainer turns metrics into readable findings |
+| **Correct** | The corrector adjusts the model for fairness tradeoffs |
+| **Report** | Results are packaged for download and review |
 
-```bash
-curl -X POST "http://localhost:8080/correct" \
-  -F "model_file=@sample_model.pkl" \
-  -F "dataset_file=@sample_dataset.csv" \
-  -F "sensitive_feature=gender"
-```
+---
 
-Expected keys in response:
+## 🧩 What Changed in This Build
 
-```json
-{
-  "before_metrics": {"...": "..."},
-  "after_metrics": {"...": "..."},
-  "accuracy_before": 0.0,
-  "accuracy_after": 0.0,
-  "fairness_improvement_pct": 0.0
-}
-```
+| Area | Update |
+|------|--------|
+| **Auth** | Added auth-state UI, logout, and demo-user fallback |
+| **Audit UX** | Added loading states, submit guardrails, and API health indicator |
+| **Validation** | Added file type and size checks before audit runs |
+| **Explainability** | Added top bias findings, confidence badges, and narrative output |
+| **Fairness view** | Added before/after meters and correction suggestions |
+| **Export** | Added report download and JSON export behavior |
+| **Landing page** | Redesigned hero, sections, spacing, footer, and contact links |
+| **Theme** | Added stronger dark-mode support and typography refinement |
 
 ---
 

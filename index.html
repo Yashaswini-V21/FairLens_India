@@ -7,19 +7,24 @@
     <title>FairLens India | Responsible AI Intelligence</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=Cormorant+Garamond:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
-    <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=Cormorant+Garamond:wght@500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@600;700;800&family=Unbounded:wght@600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles-v2.css" />
   </head>
   <body class="is-locked">
     <div class="splash-screen" id="splashScreen" aria-hidden="true">
+      <span class="splash-orb splash-orb-a" aria-hidden="true"></span>
+      <span class="splash-orb splash-orb-b" aria-hidden="true"></span>
       <div class="splash-content">
         <span class="splash-mark">FL</span>
         <div class="splash-title-block">
           <p class="splash-kicker">Fairness intelligence platform</p>
           <h1>FairLens India</h1>
           <span class="splash-sub">Audit. Explain. Correct.</span>
+          <div class="splash-signal-row" aria-label="Splash highlights">
+            <span>Live fairness scan</span>
+            <span>Plain-language explainability</span>
+            <span>Correction-ready output</span>
+          </div>
         </div>
       </div>
     </div>
@@ -44,25 +49,20 @@
 
         <nav class="main-nav" id="mainNav" aria-label="Primary">
           <a href="#vision">Overview</a>
-          <a href="#why-built">Why Built</a>
-          <a href="#beneficiaries">Beneficiaries</a>
-          <a href="#components-tabs">Components</a>
           <a href="#impact">Impact</a>
           <a href="#proof">Features</a>
           <a href="#process">How It Works</a>
-          <a href="#use-cases">Use Cases</a>
-          <a href="#stack">Stack</a>
-          <a href="#workflow">Lifecycle</a>
+          <a href="#workflow">Workflow</a>
           <a href="#footer">Contact</a>
         </nav>
 
         <div class="topbar-actions">
-          <button class="button button-ghost" id="setFirebaseTokenBtn" type="button" aria-label="Set Firebase token">
-            Firebase Auth
-          </button>
-          <button class="button button-ghost" id="setApiKeyBtn" type="button" aria-label="Set API key">
-            API Key
-          </button>
+          <a class="button button-ghost" id="loginLink" href="login.html" aria-label="Open login page">Login</a>
+          <a class="button button-soft" id="signupLink" href="signup.html" aria-label="Open sign up page">Sign Up</a>
+          <div class="auth-status-group" id="authStatusGroup" hidden>
+            <span class="auth-status-email" id="authStatusEmail"></span>
+            <button class="button button-ghost auth-logout" id="logoutBtn" type="button">Logout</button>
+          </div>
           <button class="button button-ghost button-theme" id="themeToggle" type="button" aria-pressed="false" aria-label="Switch to dark mode">
             Dark Mode
           </button>
@@ -90,21 +90,6 @@
             <button class="button button-primary audit-cta" id="openAuditHero" type="button">Audit Now</button>
             <a class="button button-soft" href="#proof">View Metrics</a>
           </div>
-          <section class="auth-card reveal" id="firebaseSetupCard" aria-label="Firebase authentication setup">
-            <div class="auth-card-copy">
-              <p class="eyebrow">Firebase-ready auth</p>
-              <h2>Use Google sign-in or keep API key fallback.</h2>
-              <p>
-                Paste your Firebase web config once, sign in with Google, and the app will attach a Firebase ID token automatically.
-              </p>
-            </div>
-            <div class="auth-card-actions">
-              <button class="button button-ghost" id="setFirebaseConfigBtn" type="button">Set Firebase Config</button>
-              <button class="button button-ghost" id="firebaseSignInBtn" type="button">Google Sign-in</button>
-              <button class="button button-ghost" id="firebaseSignOutBtn" type="button">Sign Out</button>
-            </div>
-            <p class="api-note auth-status" id="firebaseAuthStatus">Firebase auth not configured yet.</p>
-          </section>
           <div class="hero-badges" aria-label="Platform highlights">
             <span>Detect bias</span>
             <span>Explain in plain language</span>
@@ -172,6 +157,45 @@
               India-scale lending, hiring, education, and public-service systems increasingly rely on algorithmic
               decisions. Teams need fairness controls before models reach production users.
             </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section how-it-works reveal" id="how-it-works">
+        <div class="section-head">
+          <p class="eyebrow">30-second intuition</p>
+          <h2>How fairness audits work in FairLens.</h2>
+        </div>
+        <div class="how-grid">
+          <article class="how-step">
+            <span class="how-number">1</span>
+            <h4>Upload your model</h4>
+            <p>Drag in a trained model (.pkl) and your test dataset (.csv).</p>
+          </article>
+          <article class="how-step">
+            <span class="how-number">2</span>
+            <h4>Mark sensitive features</h4>
+            <p>Select which columns represent protected attributes (gender, caste, religion, etc.).</p>
+          </article>
+          <article class="how-step">
+            <span class="how-number">3</span>
+            <h4>Run bias detection</h4>
+            <p>FairLens measures how much the model treats groups unfairly—demographic parity, equalized odds, and opportunity gaps.</p>
+          </article>
+          <article class="how-step">
+            <span class="how-number">4</span>
+            <h4>Understand the findings</h4>
+            <p>Get top bias risks explaining which features drive unfair decisions, with confidence scores and impact estimates.</p>
+          </article>
+          <article class="how-step">
+            <span class="how-number">5</span>
+            <h4>Correct with Fairlearn</h4>
+            <p>Apply fairness-constrained retraining and see before/after impact on accuracy and parity.</p>
+          </article>
+          <article class="how-step">
+            <span class="how-number">6</span>
+            <h4>Export audit trail</h4>
+            <p>Download a PDF or JSON report with findings, corrections, and governance sign-off for compliance teams.</p>
           </article>
         </div>
       </section>
@@ -247,15 +271,22 @@
 
       <section class="section components-tabs reveal" id="components-tabs">
         <div class="section-head">
-          <p class="eyebrow">Components tabs</p>
-          <h2>Dock-style interactive tabs for fairness workflow components.</h2>
+          <p class="eyebrow">Task Bar Tabs</p>
+          <h2>Switch across the FairLens runtime like a product control room.</h2>
+        </div>
+
+        <div class="tabs-insight-band" aria-label="Task bar highlights">
+          <span>01 Detect</span>
+          <span>02 Explain</span>
+          <span>03 Correct</span>
+          <span>04 Report</span>
         </div>
 
         <div class="dock-tabs" id="dockTabs" role="tablist" aria-label="FairLens components tabs">
-          <button class="dock-tab active" type="button" role="tab" aria-selected="true" data-dock-tab="audit" id="dockTabAudit">Audit Core</button>
-          <button class="dock-tab" type="button" role="tab" aria-selected="false" data-dock-tab="explain" id="dockTabExplain">Explainability</button>
-          <button class="dock-tab" type="button" role="tab" aria-selected="false" data-dock-tab="correction" id="dockTabCorrection">Correction</button>
-          <button class="dock-tab" type="button" role="tab" aria-selected="false" data-dock-tab="reporting" id="dockTabReporting">Reporting</button>
+          <button class="dock-tab active" type="button" role="tab" aria-selected="true" data-dock-tab="audit" id="dockTabAudit">Audit Core <small>Intake + detection</small></button>
+          <button class="dock-tab" type="button" role="tab" aria-selected="false" data-dock-tab="explain" id="dockTabExplain">Explainability <small>SHAP + narrative</small></button>
+          <button class="dock-tab" type="button" role="tab" aria-selected="false" data-dock-tab="correction" id="dockTabCorrection">Correction <small>Fairlearn actions</small></button>
+          <button class="dock-tab" type="button" role="tab" aria-selected="false" data-dock-tab="reporting" id="dockTabReporting">Reporting <small>Evidence export</small></button>
         </div>
 
         <div class="dock-panels">
@@ -440,36 +471,98 @@
           </div>
         </div>
 
-        <div class="footer-links">
-          <div>
+        <div class="footer-grid">
+          <section class="footer-column footer-about">
+            <div class="footer-ai-icon" aria-hidden="true">
+              <span class="footer-ai-ring footer-ai-ring-a"></span>
+              <span class="footer-ai-ring footer-ai-ring-b"></span>
+              <span class="footer-ai-core">AI</span>
+            </div>
+            <p class="footer-about-kicker">Contact &amp; collaboration</p>
+            <p class="footer-about-text">
+              Reach the FairLens team for demos, hackathon feedback, partnerships, or AI fairness collaboration.
+            </p>
+            <div class="footer-social-row" aria-label="Social links">
+              <a class="footer-social-link" href="https://github.com/Yashaswini-V21" target="_blank" rel="noreferrer" aria-label="GitHub profile">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.54 2.87 8.39 6.84 9.75.5.1.68-.22.68-.49v-1.7c-2.78.62-3.37-1.37-3.37-1.37-.46-1.2-1.12-1.52-1.12-1.52-.92-.65.07-.64.07-.64 1.02.07 1.56 1.08 1.56 1.08.9 1.57 2.36 1.12 2.93.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.08 0-1.12.38-2.03 1.01-2.74-.1-.26-.44-1.3.1-2.7 0 0 .82-.27 2.7 1.05a9.1 9.1 0 0 1 4.92 0c1.88-1.32 2.7-1.05 2.7-1.05.54 1.4.2 2.44.1 2.7.63.71 1 1.62 1 2.74 0 3.95-2.34 4.82-4.57 5.08.36.32.68.94.68 1.9v2.82c0 .27.18.59.69.49A10.3 10.3 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"/></svg>
+              </a>
+              <a class="footer-social-link" href="https://www.linkedin.com/in/yashaswini-v21/" target="_blank" rel="noreferrer" aria-label="LinkedIn profile">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4.98 3.5A2.48 2.48 0 1 1 2.5 5.98 2.48 2.48 0 0 1 4.98 3.5zM3 8.75h4V21H3zM9.5 8.75h3.84v1.68h.06c.54-1.02 1.85-2.09 3.81-2.09 4.08 0 4.83 2.68 4.83 6.17V21h-4v-5.48c0-1.31-.02-3-1.83-3-1.84 0-2.12 1.44-2.12 2.9V21h-4z"/></svg>
+              </a>
+              <a class="footer-social-link" href="mailto:hello@fairlens.dev" aria-label="Send email">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zm0 3.2V17h16V8.2L12 13 4 8.2z"/></svg>
+              </a>
+            </div>
+          </section>
+
+          <section class="footer-column">
             <h4>Product</h4>
-            <a href="#vision">Vision</a>
-            <a href="#proof">Proof</a>
+            <a href="#vision">Overview</a>
+            <a href="#impact">Impact</a>
+            <a href="#proof">Features</a>
             <a href="#workflow">Workflow</a>
-          </div>
-          <div>
-            <h4>Workspace</h4>
-            <p>SHAP</p>
-            <p>Fairlearn</p>
-            <p>Audit Console</p>
-          </div>
-          <div>
+          </section>
+
+          <section class="footer-column">
+            <h4>Resources</h4>
+            <a href="README.md" target="_blank" rel="noreferrer">Project README</a>
+            <a href="Public/demo/sample_dataset.csv" download>Demo dataset</a>
+            <a href="#process">How it works</a>
+            <a href="#hero">Splash story</a>
+          </section>
+
+          <section class="footer-column">
             <h4>Support</h4>
-            <p>Guided audit flow</p>
-            <p>Report download</p>
+            <a href="login.html">Login</a>
+            <a href="signup.html">Sign up</a>
+            <a href="mailto:hello@fairlens.dev">hello@fairlens.dev</a>
             <p id="yearStamp">2026</p>
-          </div>
+          </section>
+
+          <section class="footer-column footer-stay-updated">
+            <h4>Stay Updated</h4>
+            <p>Get launch notes and fairness demo updates in one place.</p>
+            <div class="footer-subscribe-row">
+              <a class="footer-subscribe-input" href="mailto:hello@fairlens.dev?subject=FairLens%20updates">Enter your email</a>
+              <a class="button button-primary footer-subscribe-btn" href="mailto:hello@fairlens.dev?subject=FairLens%20updates">Subscribe</a>
+            </div>
+          </section>
         </div>
+
+        <p class="footer-love-line">Forged in India for fair AI futures. Solution Challenge 2026 build.</p>
       </footer>
     </main>
+
+    <div class="auth-gate-modal" id="authGateModal" aria-hidden="true">
+      <div class="auth-gate-overlay" id="authGateOverlay"></div>
+      <section class="auth-gate-panel" role="dialog" aria-modal="true" aria-label="Login required for audit">
+        <button class="auth-gate-close" id="closeAuthGate" type="button" aria-label="Close login popup">&times;</button>
+        <p class="auth-gate-kicker">Secure Audit Access</p>
+        <h2>Login or sign up to run Audit Now</h2>
+        <p>
+          Your audit workspace requires authentication so reports and fairness runs stay tied to your session.
+        </p>
+        <div class="auth-gate-actions">
+          <a class="button button-primary" href="login.html?next=audit">Login</a>
+          <a class="button button-soft" href="signup.html?next=audit">Sign Up</a>
+          <button class="button button-ghost" id="continueAuditBtn" type="button" hidden>Continue to Audit</button>
+        </div>
+      </section>
+    </div>
 
     <div class="audit-modal" id="auditModal" aria-hidden="true">
       <div class="audit-modal-overlay" id="auditModalOverlay"></div>
       <section class="audit-modal-panel" role="dialog" aria-modal="true" aria-label="FairLens Audit Console">
         <header class="audit-modal-head">
           <div>
-            <p class="eyebrow">Main Core Logic</p>
-            <h2>FairLens Audit Console</h2>
+            <p class="eyebrow">FairLens Audit Studio</p>
+            <h2>Full pipeline workspace</h2>
+            <p class="audit-subhead">Upload, diagnose, explain, and correct in one full-screen flow.</p>
+            <div class="audit-head-meta" aria-label="Audit workspace highlights">
+              <span>Live API sync</span>
+              <span>Guided workflow</span>
+              <span>Report export</span>
+            </div>
           </div>
           <button class="modal-close" id="closeAuditModal" type="button" aria-label="Close audit modal">&times;</button>
         </header>
@@ -500,7 +593,10 @@
                 <a class="button button-soft" href="Public/demo/sample_dataset.csv" download>Download Demo CSV</a>
                 <a class="button button-soft" href="Public/demo/sample_model.pkl" download>Download Demo Model</a>
                 <button class="button button-ghost" id="useDemoPresetBtn" type="button">Use Demo Preset</button>
-                <p class="api-note" id="apiConnectionStatus">API: checking...</p>
+                <div class="api-status-badge" id="apiConnectionStatus">
+                  <span class="status-dot"></span>
+                  <span class="status-text">Checking API...</span>
+                </div>
               </div>
               <form class="audit-form" id="tryAuditForm">
                 <label for="modelFile">Model file (.pkl)</label>
@@ -508,9 +604,11 @@
 
                 <label for="datasetFile">Dataset file (.csv)</label>
                 <input id="datasetFile" name="dataset_file" type="file" accept=".csv" required />
+                <p class="field-note" id="fileValidationError" hidden style="color: #e74c3c;"></p>
 
                 <label for="sensitiveCols">Sensitive columns</label>
                 <select id="sensitiveCols" name="sensitive_cols" multiple></select>
+                <p class="field-note">Tip: select multiple columns (for example: gender, location, age) for better fairness checks.</p>
 
                 <div class="threshold-row">
                   <label for="fairnessThreshold">Fairness threshold</label>
@@ -518,13 +616,17 @@
                 </div>
                 <input id="fairnessThreshold" name="fairness_threshold" type="range" min="0.05" max="0.20" step="0.01" value="0.10" />
 
-                <button class="button button-primary" id="runAuditBtn" type="submit">Run Full Audit</button>
+                <button class="button button-primary run-audit-btn" id="runAuditBtn" type="submit">Run Full Audit</button>
                 <p class="demo-note">Demo tip: generate both demo files quickly with <strong>python scripts/smoke_test.py --assets-dir Public/demo --base-url http://localhost:8080</strong></p>
               </form>
             </div>
 
             <div class="audit-panel" id="auditPanelMetrics">
               <div class="audit-output" id="tryOutput">
+                <div class="audit-loading" id="auditLoadingSpinner" hidden>
+                  <div class="spinner"></div>
+                  <p id="auditLoadingText">Running fairness audit...</p>
+                </div>
                 <p class="status-text" id="auditStatus">Upload files and run audit.</p>
                 <div class="audit-results" id="auditResults" hidden>
                   <div class="result-cards">
@@ -541,6 +643,12 @@
                       <h3 id="eopValue">-</h3>
                     </article>
                   </div>
+                  <div class="result-block score-formula-block">
+                    <h4>How score is computed</h4>
+                    <p>
+                      Composite Fairness Score = 1 - avg(|DP diff|, |EO diff|, |EOP diff|). Lower group-gap metrics mean better fairness.
+                    </p>
+                  </div>
                   <div class="result-block">
                     <h4>Bias flags</h4>
                     <ul id="biasFlagsList"></ul>
@@ -551,7 +659,15 @@
 
             <div class="audit-panel" id="auditPanelExplain">
               <div class="audit-output">
+                <div class="audit-loading" id="explainLoadingSpinner" hidden>
+                  <div class="spinner"></div>
+                  <p>Generating explanation...</p>
+                </div>
                 <p class="status-text">Plain-language narrative generated after audit run.</p>
+                <div class="top-bias-findings" id="topBiasFindings" hidden>
+                  <h4>Top 3 Bias Findings</h4>
+                  <div class="findings-grid" id="findingsGrid"></div>
+                </div>
                 <div class="result-block explain-block">
                   <h4>Plain-English explanation</h4>
                   <p id="explanationText">Run audit to view explanation.</p>
@@ -577,8 +693,32 @@
                   </article>
                 </div>
                 <div class="result-block">
+                  <h4>Before/After Fairness</h4>
+                  <div class="fairness-comparison" id="fairnessComparison">
+                    <div class="fairness-bar">
+                      <label>Before: <span id="fairnessScoreBefore">-</span></label>
+                      <div class="fairness-meter"><div class="meter-fill" id="meterBefore"></div></div>
+                    </div>
+                    <div class="fairness-bar">
+                      <label>After: <span id="fairnessScoreAfter">-</span></label>
+                      <div class="fairness-meter"><div class="meter-fill improved" id="meterAfter"></div></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="result-block">
+                  <h4>Auto-Correction Suggestions</h4>
+                  <ul id="correctionSuggestions">
+                    <li id="suggestionPlaceholder">Run audit to see recommendations.</li>
+                  </ul>
+                </div>
+                <div class="result-block">
                   <h4>Audit report</h4>
                   <p id="reportPathText">Run audit to generate report path.</p>
+                  <div class="export-actions" id="exportActions" hidden>
+                    <button class="button button-soft" id="exportPdfBtn" type="button">Download PDF</button>
+                    <button class="button button-soft" id="exportJsonBtn" type="button">Download JSON</button>
+                    <p class="export-note" id="exportNote"></p>
+                  </div>
                 </div>
               </div>
             </div>

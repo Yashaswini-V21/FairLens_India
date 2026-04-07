@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FairLens India | Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet" />
+    <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <link rel="stylesheet" href="auth-pages.css" />
+  </head>
+  <body data-auth-mode="login">
+    <div class="bg-orb orb-a" aria-hidden="true"></div>
+    <div class="bg-orb orb-b" aria-hidden="true"></div>
+    <main class="auth-shell">
+      <section class="auth-brand" aria-label="FairLens value">
+        <p class="brand-kicker">FairLens India</p>
+        <h1>Login and continue your fairness audit journey.</h1>
+        <p class="brand-copy">
+          Securely access your workspace to run bias checks, compare corrected outputs, and export governance-ready reports.
+        </p>
+        <div class="brand-points">
+          <span>Real-time fairness metrics</span>
+          <span>Actionable model correction</span>
+          <span>Audit-ready PDF reports</span>
+        </div>
+      </section>
+
+      <section class="auth-card">
+        <header class="auth-head">
+          <p>Secure Access</p>
+          <h2>Login to FairLens</h2>
+        </header>
+        <form class="auth-body" id="authForm">
+          <div class="input-group">
+            <label for="authEmail">Email</label>
+            <input id="authEmail" type="email" required placeholder="you@example.com" />
+          </div>
+
+          <div class="input-group">
+            <label for="authPassword">Password</label>
+            <input id="authPassword" type="password" required minlength="6" placeholder="Minimum 6 characters" />
+          </div>
+
+          <div class="actions">
+            <button class="btn primary" type="submit" id="submitBtn">Login</button>
+            <button class="btn soft" type="button" id="googleBtn">Continue with Google</button>
+          </div>
+          <p class="status" id="status">Use your account credentials to continue.</p>
+          <p class="links">New here? <a href="signup.html">Create account</a></p>
+          <a class="top-link" href="index.html">Back to home</a>
+        </form>
+      </section>
+    </main>
+    <script src="auth-pages.js?v=20260407-4"></script>
+  </body>
+</html>

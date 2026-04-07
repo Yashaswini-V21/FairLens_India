@@ -1,0 +1,350 @@
+:root {
+  --ink: #10223a;
+  --muted: #5b6f87;
+  --brand: #ff6d3d;
+  --brand-2: #ff9a3d;
+  --brand-deep: #cc4f1f;
+  --line: rgba(16, 54, 95, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  background:
+    radial-gradient(circle at 8% 20%, rgba(42, 145, 240, 0.18), transparent 42%),
+    radial-gradient(circle at 88% 78%, rgba(255, 128, 54, 0.2), transparent 44%),
+    linear-gradient(145deg, #edf4fb, #f5f9fd 44%, #eaf2fb);
+  color: var(--ink);
+}
+
+.bg-orb {
+  position: fixed;
+  pointer-events: none;
+  border-radius: 999px;
+  filter: blur(2px);
+  opacity: 0.5;
+  z-index: 0;
+}
+
+.orb-a {
+  width: 300px;
+  height: 300px;
+  left: -60px;
+  top: -30px;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 141, 74, 0.7), rgba(255, 141, 74, 0));
+  animation: orbFloatA 12s ease-in-out infinite;
+}
+
+.orb-b {
+  width: 360px;
+  height: 360px;
+  right: -110px;
+  bottom: -120px;
+  background: radial-gradient(circle at 40% 40%, rgba(47, 124, 211, 0.66), rgba(47, 124, 211, 0));
+  animation: orbFloatB 14s ease-in-out infinite;
+}
+
+.auth-shell {
+  min-height: 100vh;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 22px;
+  display: grid;
+  gap: 18px;
+  align-items: center;
+  grid-template-columns: 1.08fr 0.92fr;
+  position: relative;
+  z-index: 1;
+}
+
+.auth-brand {
+  padding: 22px 10px 22px 6px;
+  animation: riseIn 650ms ease both;
+}
+
+.brand-kicker {
+  display: inline-block;
+  margin: 0 0 10px;
+  padding: 7px 11px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1b5ea4;
+  background: rgba(40, 119, 206, 0.1);
+  border: 1px solid rgba(28, 104, 188, 0.24);
+}
+
+.auth-brand h1 {
+  margin: 0;
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  max-width: 14ch;
+}
+
+.brand-copy {
+  margin: 14px 0 0;
+  max-width: 52ch;
+  color: var(--muted);
+  line-height: 1.64;
+  font-size: 0.98rem;
+}
+
+.brand-points {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.brand-points span {
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-weight: 700;
+  font-size: 0.78rem;
+  color: #173757;
+  backdrop-filter: blur(6px);
+}
+
+.auth-card {
+  width: min(520px, 100%);
+  justify-self: end;
+  border-radius: 24px;
+  border: 1px solid rgba(17, 72, 128, 0.14);
+  background: rgba(255, 255, 255, 0.84);
+  box-shadow: 0 30px 55px rgba(16, 42, 73, 0.2);
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  animation: riseIn 750ms ease both;
+}
+
+.auth-head {
+  padding: 20px 20px 14px;
+  border-bottom: 1px solid rgba(17, 72, 128, 0.09);
+}
+
+.auth-head p {
+  margin: 0 0 6px;
+  font-size: 0.73rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #1d5ca0;
+}
+
+.auth-head h2 {
+  margin: 0;
+  font-family: "Sora", sans-serif;
+  letter-spacing: -0.03em;
+  font-size: 1.5rem;
+}
+
+.auth-body {
+  padding: 16px 20px 20px;
+  display: grid;
+  gap: 12px;
+}
+
+.input-group {
+  display: grid;
+  gap: 6px;
+}
+
+.auth-body label {
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #4f637a;
+}
+
+.auth-body input {
+  width: 100%;
+  border: 1px solid rgba(17, 72, 128, 0.22);
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 0.92rem;
+  font-family: inherit;
+  background: rgba(255, 255, 255, 0.95);
+  color: #142a45;
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.auth-body input:focus {
+  outline: none;
+  border-color: rgba(41, 127, 219, 0.72);
+  box-shadow: 0 0 0 4px rgba(47, 125, 211, 0.15);
+  transform: translateY(-1px);
+}
+
+.actions {
+  display: grid;
+  gap: 9px;
+  margin-top: 4px;
+}
+
+.btn {
+  min-height: 46px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  font-family: "Sora", sans-serif;
+  font-size: 0.83rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn.primary {
+  color: #fff;
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  box-shadow: 0 12px 24px rgba(255, 106, 61, 0.28);
+}
+
+.btn.primary:hover {
+  box-shadow: 0 14px 28px rgba(255, 106, 61, 0.34);
+}
+
+.btn.soft {
+  color: #1b5ca1;
+  border-color: rgba(47, 125, 211, 0.28);
+  background: rgba(47, 125, 211, 0.1);
+}
+
+.btn.soft:hover {
+  background: rgba(47, 125, 211, 0.16);
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.75;
+  transform: none;
+}
+
+.status {
+  margin: 2px 0 0;
+  font-size: 0.86rem;
+  color: var(--muted);
+  min-height: 22px;
+}
+
+.links {
+  margin-top: 2px;
+  font-size: 0.84rem;
+  color: #4d6178;
+}
+
+.links a,
+.top-link {
+  color: #1d5ca0;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.links a:hover,
+.top-link:hover {
+  color: #154a83;
+}
+
+.top-link {
+  display: inline-block;
+  margin-top: 3px;
+  font-size: 0.82rem;
+}
+
+@keyframes orbFloatA {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(25px, 18px, 0);
+  }
+}
+
+@keyframes orbFloatB {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(-32px, -24px, 0);
+  }
+}
+
+@keyframes riseIn {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 980px) {
+  .auth-shell {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 16px;
+  }
+
+  .auth-brand {
+    padding: 8px 2px 2px;
+  }
+
+  .auth-brand h1 {
+    max-width: none;
+    font-size: clamp(1.55rem, 7vw, 2.2rem);
+  }
+
+  .brand-copy {
+    margin-top: 10px;
+    font-size: 0.93rem;
+    line-height: 1.55;
+  }
+
+  .brand-points {
+    margin-top: 14px;
+  }
+
+  .auth-card {
+    justify-self: stretch;
+    width: 100%;
+  }
+}
+
+@media (max-width: 560px) {
+  .brand-points span {
+    font-size: 0.74rem;
+    padding: 7px 10px;
+  }
+
+  .auth-head h2 {
+    font-size: 1.35rem;
+  }
+
+  .auth-body {
+    padding: 14px;
+  }
+}

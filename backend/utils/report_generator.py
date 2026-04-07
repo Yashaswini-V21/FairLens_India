@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import os
-import tempfile
 from datetime import datetime
 from hashlib import sha256
 from pathlib import Path
@@ -47,7 +46,8 @@ def _dataset_hash(state: Dict[str, Any]) -> str:
 
 def generate_pdf(state: Dict[str, Any]) -> str:
     timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
-    output_dir = Path(os.environ.get("FAIRLENS_REPORT_DIR", tempfile.gettempdir()))
+    default_output_dir = Path(__file__).resolve().parents[2] / "reports"
+    output_dir = Path(os.environ.get("FAIRLENS_REPORT_DIR", str(default_output_dir)))
     output_path = output_dir / f"fairlens_audit_{timestamp}.pdf"
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
