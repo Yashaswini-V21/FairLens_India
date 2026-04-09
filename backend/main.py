@@ -16,11 +16,24 @@ from backend.utils.firebase_handler import get_count, init_firebase, verify_id_t
 from backend.utils.report_generator import generate_pdf
 
 
+def _get_cors_origins() -> tuple[list[str], bool]:
+    raw = os.environ.get("CORS_ORIGINS", "*").strip()
+    if not raw or raw == "*":
+        # Keep demo-friendly wildcard for local/hackathon runs.
+        return ["*"], False
+
+    origins = [item.strip() for item in raw.split(",") if item.strip()]
+    return origins or ["*"], bool(origins)
+
+
+cors_origins, cors_allow_credentials = _get_cors_origins()
+
+
 app = FastAPI(title="FairLens India API", version="0.1.0")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=cors_origins,
+    allow_credentials=cors_allow_credentials,
     allow_methods=["*"],
     allow_headers=["*"],
 )

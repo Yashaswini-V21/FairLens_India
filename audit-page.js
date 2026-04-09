@@ -1,5 +1,6 @@
 const authTokenStorageKey = 'fairlens-auth-token';
 const authEmailStorageKey = 'fairlens-auth-email';
+const API_BASE_URL = String(window.FAIRLENS_API_BASE_URL || 'http://localhost:8080').replace(/\/+$/, '');
 const csvSensitiveHints = ['gender', 'sex', 'caste', 'religion', 'age', 'disability', 'region', 'state', 'language'];
 
 const logoutBtn = document.getElementById('logoutBtn');
@@ -293,7 +294,7 @@ const updateApiStatusBadge = async () => {
   const statusText = apiConnectionStatus.querySelector('.status-text');
 
   try {
-    const response = await fetch('http://localhost:8080/health', { headers: buildApiHeaders() });
+    const response = await fetch(`${API_BASE_URL}/health`, { headers: buildApiHeaders() });
     if (response.ok) {
       statusDot.classList.add('online');
       statusText.textContent = 'API: Online';
@@ -419,7 +420,7 @@ if (tryAuditForm && modelFileInput && datasetFileInput && sensitiveColsSelect &&
     payload.append('fairness_threshold', fairnessThreshold.value);
 
     try {
-      const response = await fetch('http://localhost:8080/audit', {
+      const response = await fetch(`${API_BASE_URL}/audit`, {
         method: 'POST',
         headers: buildApiHeaders(),
         body: payload

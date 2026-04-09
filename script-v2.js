@@ -11,6 +11,7 @@ const dockTabs = Array.from(document.querySelectorAll('.dock-tab'));
 const dockPanels = Array.from(document.querySelectorAll('.dock-panel'));
 const themeStorageKey = 'fairlens-theme';
 const authTokenStorageKey = 'fairlens-auth-token';
+const API_BASE_URL = String(window.FAIRLENS_API_BASE_URL || 'http://localhost:8080').replace(/\/+$/, '');
 
 const auditModal = document.getElementById('auditModal');
 const auditModalOverlay = document.getElementById('auditModalOverlay');
@@ -653,7 +654,7 @@ const updateApiStatusBadge = async () => {
   if (!apiConnectionStatus) return;
   
   try {
-    const response = await fetch('http://localhost:8080/health', {
+    const response = await fetch(`${API_BASE_URL}/health`, {
       headers: buildApiHeaders()
     });
     
@@ -970,7 +971,7 @@ if (tryAuditForm && modelFileInput && datasetFileInput && sensitiveColsSelect &&
     payload.append('fairness_threshold', fairnessThreshold.value);
 
     try {
-      const response = await fetch('http://localhost:8080/audit', {
+      const response = await fetch(`${API_BASE_URL}/audit`, {
         method: 'POST',
         headers: buildApiHeaders(),
         body: payload
