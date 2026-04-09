@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FairLens India | Audit Workspace</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="audit-page.css?v=20260409-2" />
+  </head>
+  <body>
+    <div class="aurora aurora-a" aria-hidden="true"></div>
+    <div class="aurora aurora-b" aria-hidden="true"></div>
+
+    <main class="audit-shell">
+      <header class="audit-topbar">
+        <div>
+          <p class="kicker">FairLens Audit Runtime</p>
+          <h1>Decision fairness command center</h1>
+          <p class="sub">Upload, diagnose, explain, correct, and export from one dedicated workspace.</p>
+        </div>
+        <div class="top-actions">
+          <a class="btn ghost" href="index.html">Back Home</a>
+          <div class="api-status-badge" id="apiConnectionStatus">
+            <span class="status-dot"></span>
+            <span class="status-text">Checking API...</span>
+          </div>
+          <button class="btn ghost" id="logoutBtn" type="button">Logout</button>
+        </div>
+      </header>
+
+      <section class="audit-layout">
+        <aside class="left-rail">
+          <h2>Flow map</h2>
+          <ol>
+            <li><strong>1</strong><span>Upload model and dataset</span></li>
+            <li><strong>2</strong><span>Run fairness diagnostics</span></li>
+            <li><strong>3</strong><span>Review findings and explanation</span></li>
+            <li><strong>4</strong><span>Compare corrected outputs</span></li>
+            <li><strong>5</strong><span>Export compliance artifacts</span></li>
+          </ol>
+          <div class="rail-actions">
+            <a class="btn soft" href="Public/demo/sample_dataset.csv" download>Download Demo CSV</a>
+            <a class="btn soft" href="Public/demo/sample_model.pkl" download>Download Demo Model</a>
+            <button class="btn ghost" id="useDemoPresetBtn" type="button">Apply Demo Preset</button>
+          </div>
+        </aside>
+
+        <section class="workspace">
+          <article class="panel intake-panel">
+            <h3>Inputs</h3>
+            <form id="tryAuditForm" class="audit-form">
+              <div class="grid two">
+                <div class="input-card">
+                  <label for="modelFile">Model file (.pkl)</label>
+                  <input id="modelFile" name="model_file" type="file" accept=".pkl" required />
+                </div>
+                <div class="input-card">
+                  <label for="datasetFile">Dataset file (.csv)</label>
+                  <input id="datasetFile" name="dataset_file" type="file" accept=".csv" required />
+                </div>
+              </div>
+
+              <p class="error" id="fileValidationError" hidden></p>
+
+              <div class="grid two">
+                <div class="input-card">
+                  <label for="sensitiveCols">Sensitive columns</label>
+                  <select id="sensitiveCols" name="sensitive_cols" multiple></select>
+                  <p class="note">Select one or more protected attributes for fairness checks.</p>
+                </div>
+                <div class="input-card">
+                  <div class="threshold-row">
+                    <label for="fairnessThreshold">Fairness threshold</label>
+                    <span id="thresholdValue">0.10</span>
+                  </div>
+                  <input id="fairnessThreshold" name="fairness_threshold" type="range" min="0.05" max="0.20" step="0.01" value="0.10" />
+                  <p class="note">Lower value means stricter fairness tolerance.</p>
+                </div>
+              </div>
+
+              <div class="submit-row">
+                <button class="btn primary" id="runAuditBtn" type="submit">Run Full Audit</button>
+                <p class="note">Quick assets: python scripts/smoke_test.py --assets-dir Public/demo --base-url http://localhost:8080</p>
+              </div>
+            </form>
+          </article>
+
+          <div class="workspace-dual">
+            <article class="panel metrics-panel">
+              <div class="panel-head">
+                <h3>Metrics and health</h3>
+                <p class="status" id="auditStatus">Upload files and run audit.</p>
+              </div>
+
+              <div class="audit-loading" id="auditLoadingSpinner" hidden>
+                <div class="spinner"></div>
+                <p id="auditLoadingText">Running fairness audit...</p>
+              </div>
+
+              <div class="audit-results" id="auditResults" hidden>
+                <div class="stats-grid">
+                  <article><p>Demographic parity</p><h4 id="dpValue">-</h4></article>
+                  <article><p>Equalized odds</p><h4 id="eoValue">-</h4></article>
+                  <article><p>Equal opportunity</p><h4 id="eopValue">-</h4></article>
+                </div>
+                <div class="result-block score-formula-block">
+                  <h5>Score formula</h5>
+                  <p>Composite Fairness Score = 1 - avg(|DP diff|, |EO diff|, |EOP diff|).</p>
+                </div>
+                <div class="result-block">
+                  <h5>Bias flags</h5>
+                  <ul id="biasFlagsList"></ul>
+                </div>
+              </div>
+            </article>
+
+            <article class="panel explain-panel">
+              <h3>Explainability</h3>
+              <div class="audit-loading" id="explainLoadingSpinner" hidden>
+                <div class="spinner"></div>
+                <p>Generating explanation...</p>
+              </div>
+              <div class="top-bias-findings" id="topBiasFindings" hidden>
+                <h5>Top 3 bias findings</h5>
+                <div class="findings-grid" id="findingsGrid"></div>
+              </div>
+              <div class="result-block">
+                <h5>Plain-language summary</h5>
+                <p id="explanationText">Run audit to view explanation.</p>
+              </div>
+            </article>
+          </div>
+
+          <article class="panel correction-panel">
+            <h3>Correction and exports</h3>
+            <div class="stats-grid correction-cards">
+              <article><p>Accuracy before</p><h4 id="accuracyBeforeValue">-</h4></article>
+              <article><p>Accuracy after</p><h4 id="accuracyAfterValue">-</h4></article>
+              <article><p>Fairness improvement</p><h4 id="improvementValue">-</h4></article>
+            </div>
+
+            <div class="result-block">
+              <h5>Before and after fairness</h5>
+              <div class="fairness-comparison" id="fairnessComparison">
+                <div class="fairness-bar">
+                  <label>Before: <span id="fairnessScoreBefore">-</span></label>
+                  <div class="fairness-meter"><div class="meter-fill" id="meterBefore"></div></div>
+                </div>
+                <div class="fairness-bar">
+                  <label>After: <span id="fairnessScoreAfter">-</span></label>
+                  <div class="fairness-meter"><div class="meter-fill improved" id="meterAfter"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="result-block">
+              <h5>Auto-correction suggestions</h5>
+              <ul id="correctionSuggestions">
+                <li id="suggestionPlaceholder">Run audit to see recommendations.</li>
+              </ul>
+            </div>
+
+            <div class="result-block">
+              <h5>Audit report</h5>
+              <p id="reportPathText">Run audit to generate report path.</p>
+              <div class="export-actions" id="exportActions" hidden>
+                <button class="btn soft" id="exportPdfBtn" type="button">Download PDF</button>
+                <button class="btn soft" id="exportJsonBtn" type="button">Download JSON</button>
+                <p class="note" id="exportNote"></p>
+              </div>
+            </div>
+          </article>
+        </section>
+      </section>
+    </main>
+
+    <script src="audit-page.js?v=20260409-2"></script>
+  </body>
+</html>

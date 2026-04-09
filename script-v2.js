@@ -65,9 +65,10 @@ const exportActions = document.getElementById('exportActions');
 const exportPdfBtn = document.getElementById('exportPdfBtn');
 const exportJsonBtn = document.getElementById('exportJsonBtn');
 const exportNote = document.getElementById('exportNote');
-const loginLink = document.getElementById('loginLink');
-const signupLink = document.getElementById('signupLink');
+const accessLink = document.getElementById('accessLink');
 const authStatusGroup = document.getElementById('authStatusGroup');
+const userMenuBtn = document.getElementById('userMenuBtn');
+const userMenuPanel = document.getElementById('userMenuPanel');
 const authStatusEmail = document.getElementById('authStatusEmail');
 const logoutBtn = document.getElementById('logoutBtn');
 let apiHealthLastCheckedAt = 0;
@@ -273,8 +274,31 @@ const lockBody = () => {
   document.body.classList.add('is-locked');
 };
 
+const closeUserMenu = () => {
+  if (!userMenuPanel || !userMenuBtn) {
+    return;
+  }
+
+  userMenuPanel.hidden = true;
+  userMenuBtn.setAttribute('aria-expanded', 'false');
+};
+
+const toggleUserMenu = () => {
+  if (!userMenuPanel || !userMenuBtn || authStatusGroup?.hidden) {
+    return;
+  }
+
+  const willOpen = userMenuPanel.hidden;
+  userMenuPanel.hidden = !willOpen;
+  userMenuBtn.setAttribute('aria-expanded', String(willOpen));
+};
+
 const openAuthGateModal = () => {
-  window.location.href = 'signup.html?next=audit';
+  if (hasAuthToken()) {
+    window.location.href = 'audit.html';
+    return;
+  }
+  window.location.href = 'access.html?next=audit';
 };
 
 const closeAuthGateModal = () => {
@@ -345,8 +369,8 @@ const closeAuditModalPanel = () => {
 window.addEventListener('load', () => {
   if (!splashScreen) {
     unlockBody();
-    if (window.location.search.includes('openAudit=1') && hasAuthToken()) {
-      window.setTimeout(openAuditModal, 120);
+    if (window.location.search.includes('openAudit=1')) {
+      window.setTimeout(openAuthGateModal, 120);
     }
     return;
   }
@@ -354,8 +378,8 @@ window.addEventListener('load', () => {
   window.setTimeout(() => {
     splashScreen.classList.add('hidden');
     unlockBody();
-    if (window.location.search.includes('openAudit=1') && hasAuthToken()) {
-      window.setTimeout(openAuditModal, 120);
+    if (window.location.search.includes('openAudit=1')) {
+      window.setTimeout(openAuthGateModal, 120);
     }
   }, 2500);
 });
@@ -416,6 +440,10 @@ document.addEventListener('keydown', (event) => {
 
   if (event.key === 'Escape' && authGateModal?.classList.contains('show')) {
     closeAuthGateModal();
+  }
+
+  if (event.key === 'Escape') {
+    closeUserMenu();
   }
 
 });
@@ -568,7 +596,6 @@ const updateAuthUI = () => {
   const token = readStoredAuthToken();
   const email = localStorage.getItem('fairlens-auth-email');
   const loggedIn = Boolean(token && email);
-  const isDemoIdentity = typeof email === 'string' && email.toLowerCase().includes('demo.user@fairlens.dev');
 
   [openAuditTop, openAuditHero, openAuditFooter].forEach((btn) => {
     if (!btn) {
@@ -578,14 +605,15 @@ const updateAuthUI = () => {
   });
   
   if (loggedIn) {
-    if (loginLink) loginLink.hidden = true;
-    if (signupLink) signupLink.hidden = true;
+    if (accessLink) accessLink.hidden = true;
     if (authStatusGroup) authStatusGroup.hidden = false;
-    if (authStatusEmail) authStatusEmail.textContent = isDemoIdentity ? 'Signed in' : email;
+    if (authStatusEmail) authStatusEmail.textContent = email;
+    if (userMenuPanel) userMenuPanel.hidden = true;
+    if (userMenuBtn) userMenuBtn.setAttribute('aria-expanded', 'false');
   } else {
-    if (loginLink) loginLink.hidden = false;
-    if (signupLink) signupLink.hidden = false;
+    if (accessLink) accessLink.hidden = false;
     if (authStatusGroup) authStatusGroup.hidden = true;
+    closeUserMenu();
   }
 };
 
@@ -1053,6 +1081,30 @@ window.addEventListener('resize', () => {
 if (logoutBtn) {
   logoutBtn.addEventListener('click', handleLogout);
 }
+
+if (userMenuBtn) {
+  userMenuBtn.addEventListener('click', (event) => {
+    event.stopPropagation();
+    toggleUserMenu();
+  });
+}
+
+if (userMenuPanel) {
+  userMenuPanel.addEventListener('click', (event) => {
+    event.stopPropagation();
+  });
+}
+
+document.addEventListener('click', (event) => {
+  const target = event.target;
+  if (!(target instanceof Node)) {
+    return;
+  }
+
+  if (!authStatusGroup?.contains(target)) {
+    closeUserMenu();
+  }
+});
 
 if (exportPdfBtn) {
   exportPdfBtn.addEventListener('click', exportToPdf);

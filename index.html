@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=Cormorant+Garamond:wght@500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@600;700;800&family=Unbounded:wght@600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles-v2.css" />
+    <link rel="stylesheet" href="styles-v2.css?v=20260409-7" />
   </head>
   <body class="is-locked">
     <div class="splash-screen" id="splashScreen" aria-hidden="true">
@@ -57,11 +57,21 @@
         </nav>
 
         <div class="topbar-actions">
-          <a class="button button-ghost" id="loginLink" href="login.html" aria-label="Open login page">Login</a>
-          <a class="button button-soft" id="signupLink" href="signup.html" aria-label="Open sign up page">Sign Up</a>
+          <a class="button button-soft" id="accessLink" href="access.html" aria-label="Open workspace access">Access Workspace</a>
           <div class="auth-status-group" id="authStatusGroup" hidden>
-            <span class="auth-status-email" id="authStatusEmail"></span>
-            <button class="button button-ghost auth-logout" id="logoutBtn" type="button">Logout</button>
+            <button class="user-menu-trigger" id="userMenuBtn" type="button" aria-label="Open user menu" aria-expanded="false" aria-controls="userMenuPanel">
+              <span class="user-menu-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="18" height="18" role="img" aria-hidden="true">
+                  <path fill="currentColor" d="M12 12c2.76 0 5-2.24 5-5S14.76 2 12 2 7 4.24 7 7s2.24 5 5 5Zm0 2c-3.33 0-10 1.67-10 5v1h20v-1c0-3.33-6.67-5-10-5Z"/>
+                </svg>
+              </span>
+              <span class="user-menu-text">Account</span>
+            </button>
+            <div class="user-menu-panel" id="userMenuPanel" hidden>
+              <p class="user-menu-label">Registered email</p>
+              <p class="auth-status-email" id="authStatusEmail"></p>
+              <button class="button button-ghost auth-logout" id="logoutBtn" type="button">Logout</button>
+            </div>
           </div>
           <button class="button button-ghost button-theme" id="themeToggle" type="button" aria-pressed="false" aria-label="Switch to dark mode">
             Dark Mode
@@ -271,43 +281,43 @@
 
       <section class="section components-tabs reveal" id="components-tabs">
         <div class="section-head">
-          <p class="eyebrow">Task Bar Tabs</p>
-          <h2>Switch across the FairLens runtime like a product control room.</h2>
+          <p class="eyebrow">Runtime Surfaces</p>
+          <h2>One workspace, four intelligence layers.</h2>
         </div>
 
         <div class="tabs-insight-band" aria-label="Task bar highlights">
-          <span>01 Detect</span>
-          <span>02 Explain</span>
-          <span>03 Correct</span>
-          <span>04 Report</span>
+          <span>Signal Detection</span>
+          <span>Narrative Intelligence</span>
+          <span>Correction Controls</span>
+          <span>Governance Evidence</span>
         </div>
 
         <div class="dock-tabs" id="dockTabs" role="tablist" aria-label="FairLens components tabs">
-          <button class="dock-tab active" type="button" role="tab" aria-selected="true" data-dock-tab="audit" id="dockTabAudit">Audit Core <small>Intake + detection</small></button>
-          <button class="dock-tab" type="button" role="tab" aria-selected="false" data-dock-tab="explain" id="dockTabExplain">Explainability <small>SHAP + narrative</small></button>
-          <button class="dock-tab" type="button" role="tab" aria-selected="false" data-dock-tab="correction" id="dockTabCorrection">Correction <small>Fairlearn actions</small></button>
-          <button class="dock-tab" type="button" role="tab" aria-selected="false" data-dock-tab="reporting" id="dockTabReporting">Reporting <small>Evidence export</small></button>
+          <button class="dock-tab active" type="button" role="tab" aria-selected="true" data-dock-tab="audit" id="dockTabAudit">01 Audit Signal <small>Dataset + sensitive feature scan</small></button>
+          <button class="dock-tab" type="button" role="tab" aria-selected="false" data-dock-tab="explain" id="dockTabExplain">02 Explain Layer <small>SHAP and plain-language output</small></button>
+          <button class="dock-tab" type="button" role="tab" aria-selected="false" data-dock-tab="correction" id="dockTabCorrection">03 Correct Engine <small>Constraint tuning and tradeoffs</small></button>
+          <button class="dock-tab" type="button" role="tab" aria-selected="false" data-dock-tab="reporting" id="dockTabReporting">04 Evidence Pack <small>Decision trace and export</small></button>
         </div>
 
         <div class="dock-panels">
           <article class="dock-panel active" data-dock-panel="audit" role="tabpanel" aria-labelledby="dockTabAudit">
-            <h3>Audit Core Engine</h3>
-            <p>Upload model and dataset, auto-detect sensitive attributes, and run parity scoring in one controlled pipeline.</p>
+            <h3>Audit Signal Layer</h3>
+            <p>Intake model and dataset files, surface protected-attribute influence, and generate fairness metrics from a single control surface.</p>
           </article>
 
           <article class="dock-panel" data-dock-panel="explain" role="tabpanel" aria-labelledby="dockTabExplain">
-            <h3>SHAP + LLM Explainability</h3>
-            <p>Map influential signals with SHAP, then convert technical findings into plain-language narratives for stakeholders.</p>
+            <h3>Explainability Layer</h3>
+            <p>Translate SHAP-level diagnostics into concise explanations product, policy, and risk teams can act on quickly.</p>
           </article>
 
           <article class="dock-panel" data-dock-panel="correction" role="tabpanel" aria-labelledby="dockTabCorrection">
-            <h3>Fairlearn Correction Layer</h3>
-            <p>Apply fairness-constrained remediation and compare before/after model behavior with measurable tradeoff visibility.</p>
+            <h3>Correction Layer</h3>
+            <p>Apply fairness constraints, compare before and after parity behavior, and monitor the accuracy impact before release.</p>
           </article>
 
           <article class="dock-panel" data-dock-panel="reporting" role="tabpanel" aria-labelledby="dockTabReporting">
-            <h3>Governance Reporting</h3>
-            <p>Generate audit-ready report output for compliance, product reviews, and release decision checkpoints.</p>
+            <h3>Governance Evidence Layer</h3>
+            <p>Generate an audit trail with metrics, explanation, and correction outputs ready for leadership and compliance reviews.</p>
           </article>
         </div>
       </section>
@@ -538,14 +548,12 @@
       <section class="auth-gate-panel" role="dialog" aria-modal="true" aria-label="Login required for audit">
         <button class="auth-gate-close" id="closeAuthGate" type="button" aria-label="Close login popup">&times;</button>
         <p class="auth-gate-kicker">Secure Audit Access</p>
-        <h2>Login or sign up to run Audit Now</h2>
+        <h2>Unlock your audit workspace</h2>
         <p>
-          Your audit workspace requires authentication so reports and fairness runs stay tied to your session.
+          Use one access flow to enter your workspace. Your runs and reports stay tied to your identity.
         </p>
         <div class="auth-gate-actions">
-          <a class="button button-primary" href="login.html?next=audit">Login</a>
-          <a class="button button-soft" href="signup.html?next=audit">Sign Up</a>
-          <button class="button button-ghost" id="continueAuditBtn" type="button" hidden>Continue to Audit</button>
+          <a class="button button-primary" href="access.html?next=audit">Access Workspace</a>
         </div>
       </section>
     </div>
@@ -554,70 +562,86 @@
       <div class="audit-modal-overlay" id="auditModalOverlay"></div>
       <section class="audit-modal-panel" role="dialog" aria-modal="true" aria-label="FairLens Audit Console">
         <header class="audit-modal-head">
-          <div>
-            <p class="eyebrow">FairLens Audit Studio</p>
-            <h2>Full pipeline workspace</h2>
-            <p class="audit-subhead">Upload, diagnose, explain, and correct in one full-screen flow.</p>
-            <div class="audit-head-meta" aria-label="Audit workspace highlights">
-              <span>Live API sync</span>
-              <span>Guided workflow</span>
-              <span>Report export</span>
-            </div>
+          <div class="audit-head-intro">
+            <p class="eyebrow">Audit Command Deck</p>
+            <h2>Bias control room</h2>
+            <p class="audit-subhead">A focused runtime to inspect fairness risk, explain it, and publish correction evidence.</p>
           </div>
-          <button class="modal-close" id="closeAuditModal" type="button" aria-label="Close audit modal">&times;</button>
+          <div class="audit-head-actions">
+            <div class="api-status-badge" id="apiConnectionStatus">
+              <span class="status-dot"></span>
+              <span class="status-text">Checking API...</span>
+            </div>
+            <button class="modal-close" id="closeAuditModal" type="button" aria-label="Close audit modal">&times;</button>
+          </div>
         </header>
 
         <div class="audit-modal-body">
           <aside class="core-logic-pane">
-            <h3>Pipeline Logic</h3>
+            <h3>Run sequence</h3>
             <ol>
-              <li><strong>Upload</strong><span>Model + dataset intake</span></li>
-              <li><strong>Detect</strong><span>SHAP sensitive-feature influence</span></li>
-              <li><strong>Score</strong><span>Fairlearn fairness metrics</span></li>
-              <li><strong>Explain</strong><span>LLM plain-language summary</span></li>
-              <li><strong>Correct</strong><span>Fairness-constrained remediation</span></li>
+              <li><strong>Stage 01</strong><span>Ingest model and data assets</span></li>
+              <li><strong>Stage 02</strong><span>Detect imbalance across protected groups</span></li>
+              <li><strong>Stage 03</strong><span>Generate explainable findings</span></li>
+              <li><strong>Stage 04</strong><span>Apply correction and compare tradeoffs</span></li>
+              <li><strong>Stage 05</strong><span>Export report-ready evidence</span></li>
             </ol>
-            <p class="logic-note">This popup runs your main project flow through the backend audit endpoint.</p>
+            <p class="logic-note">This workspace maps directly to the backend audit pipeline and report generation flow.</p>
+            <div class="audit-utility-row">
+              <a class="button button-soft" href="Public/demo/sample_dataset.csv" download>Demo CSV</a>
+              <a class="button button-soft" href="Public/demo/sample_model.pkl" download>Demo Model</a>
+              <button class="button button-ghost" id="useDemoPresetBtn" type="button">Apply Demo Preset</button>
+            </div>
           </aside>
 
           <div class="audit-runtime-pane">
             <div class="audit-tabs" role="tablist" aria-label="Audit console tabs">
-              <button class="audit-tab active" type="button" data-audit-tab="input" aria-selected="true">Input</button>
-              <button class="audit-tab" type="button" data-audit-tab="metrics" aria-selected="false">Metrics</button>
-              <button class="audit-tab" type="button" data-audit-tab="explain" aria-selected="false">Explanation</button>
-              <button class="audit-tab" type="button" data-audit-tab="correct" aria-selected="false">Correction</button>
+              <button class="audit-tab active" type="button" data-audit-tab="input" aria-selected="true">01 Input</button>
+              <button class="audit-tab" type="button" data-audit-tab="metrics" aria-selected="false">02 Metrics</button>
+              <button class="audit-tab" type="button" data-audit-tab="explain" aria-selected="false">03 Explain</button>
+              <button class="audit-tab" type="button" data-audit-tab="correct" aria-selected="false">04 Correct</button>
             </div>
 
             <div class="audit-panel active" id="auditPanelInput">
-              <div class="audit-utility-row">
-                <a class="button button-soft" href="Public/demo/sample_dataset.csv" download>Download Demo CSV</a>
-                <a class="button button-soft" href="Public/demo/sample_model.pkl" download>Download Demo Model</a>
-                <button class="button button-ghost" id="useDemoPresetBtn" type="button">Use Demo Preset</button>
-                <div class="api-status-badge" id="apiConnectionStatus">
-                  <span class="status-dot"></span>
-                  <span class="status-text">Checking API...</span>
-                </div>
-              </div>
               <form class="audit-form" id="tryAuditForm">
-                <label for="modelFile">Model file (.pkl)</label>
-                <input id="modelFile" name="model_file" type="file" accept=".pkl" required />
-
-                <label for="datasetFile">Dataset file (.csv)</label>
-                <input id="datasetFile" name="dataset_file" type="file" accept=".csv" required />
-                <p class="field-note" id="fileValidationError" hidden style="color: #e74c3c;"></p>
-
-                <label for="sensitiveCols">Sensitive columns</label>
-                <select id="sensitiveCols" name="sensitive_cols" multiple></select>
-                <p class="field-note">Tip: select multiple columns (for example: gender, location, age) for better fairness checks.</p>
-
-                <div class="threshold-row">
-                  <label for="fairnessThreshold">Fairness threshold</label>
-                  <span id="thresholdValue">0.10</span>
+                <div class="audit-file-grid">
+                  <section class="audit-file-card">
+                    <h4>Model artifact</h4>
+                    <label for="modelFile">Upload .pkl model file</label>
+                    <input id="modelFile" name="model_file" type="file" accept=".pkl" required />
+                  </section>
+                  <section class="audit-file-card">
+                    <h4>Evaluation dataset</h4>
+                    <label for="datasetFile">Upload .csv dataset file</label>
+                    <input id="datasetFile" name="dataset_file" type="file" accept=".csv" required />
+                  </section>
                 </div>
-                <input id="fairnessThreshold" name="fairness_threshold" type="range" min="0.05" max="0.20" step="0.01" value="0.10" />
 
-                <button class="button button-primary run-audit-btn" id="runAuditBtn" type="submit">Run Full Audit</button>
-                <p class="demo-note">Demo tip: generate both demo files quickly with <strong>python scripts/smoke_test.py --assets-dir Public/demo --base-url http://localhost:8080</strong></p>
+                <p class="field-note" id="fileValidationError" hidden></p>
+
+                <div class="audit-config-grid">
+                  <section class="audit-config-card">
+                    <h4>Protected attributes</h4>
+                    <label for="sensitiveCols">Sensitive columns</label>
+                    <select id="sensitiveCols" name="sensitive_cols" multiple></select>
+                    <p class="field-note">Choose one or more columns such as gender, location, caste, age, or religion.</p>
+                  </section>
+
+                  <section class="audit-config-card">
+                    <h4>Fairness tolerance</h4>
+                    <div class="threshold-row">
+                      <label for="fairnessThreshold">Threshold</label>
+                      <span id="thresholdValue">0.10</span>
+                    </div>
+                    <input id="fairnessThreshold" name="fairness_threshold" type="range" min="0.05" max="0.20" step="0.01" value="0.10" />
+                    <p class="field-note">Lower thresholds enforce stricter fairness constraints.</p>
+                  </section>
+                </div>
+
+                <div class="audit-submit-row">
+                  <button class="button button-primary run-audit-btn" id="runAuditBtn" type="submit">Run Full Audit</button>
+                  <p class="demo-note">Demo command: <strong>python scripts/smoke_test.py --assets-dir Public/demo --base-url http://localhost:8080</strong></p>
+                </div>
               </form>
             </div>
 
@@ -643,14 +667,14 @@
                       <h3 id="eopValue">-</h3>
                     </article>
                   </div>
+
                   <div class="result-block score-formula-block">
-                    <h4>How score is computed</h4>
-                    <p>
-                      Composite Fairness Score = 1 - avg(|DP diff|, |EO diff|, |EOP diff|). Lower group-gap metrics mean better fairness.
-                    </p>
+                    <h4>Composite score logic</h4>
+                    <p>Composite Fairness Score = 1 - avg(|DP diff|, |EO diff|, |EOP diff|). Smaller gaps indicate fairer outcomes.</p>
                   </div>
+
                   <div class="result-block">
-                    <h4>Bias flags</h4>
+                    <h4>Flagged risks</h4>
                     <ul id="biasFlagsList"></ul>
                   </div>
                 </div>
@@ -663,13 +687,13 @@
                   <div class="spinner"></div>
                   <p>Generating explanation...</p>
                 </div>
-                <p class="status-text">Plain-language narrative generated after audit run.</p>
+                <p class="status-text">Narrative output appears after the fairness run completes.</p>
                 <div class="top-bias-findings" id="topBiasFindings" hidden>
-                  <h4>Top 3 Bias Findings</h4>
+                  <h4>Top 3 bias findings</h4>
                   <div class="findings-grid" id="findingsGrid"></div>
                 </div>
                 <div class="result-block explain-block">
-                  <h4>Plain-English explanation</h4>
+                  <h4>Plain-language summary</h4>
                   <p id="explanationText">Run audit to view explanation.</p>
                 </div>
               </div>
@@ -677,7 +701,7 @@
 
             <div class="audit-panel" id="auditPanelCorrect">
               <div class="audit-output">
-                <p class="status-text">Bias correction and report outputs from the latest run.</p>
+                <p class="status-text">Correction outcomes and report artifacts from the latest run.</p>
                 <div class="result-cards correction-cards">
                   <article>
                     <p>Accuracy before</p>
@@ -692,8 +716,9 @@
                     <h3 id="improvementValue">-</h3>
                   </article>
                 </div>
+
                 <div class="result-block">
-                  <h4>Before/After Fairness</h4>
+                  <h4>Before and after fairness</h4>
                   <div class="fairness-comparison" id="fairnessComparison">
                     <div class="fairness-bar">
                       <label>Before: <span id="fairnessScoreBefore">-</span></label>
@@ -705,12 +730,14 @@
                     </div>
                   </div>
                 </div>
+
                 <div class="result-block">
-                  <h4>Auto-Correction Suggestions</h4>
+                  <h4>Auto-correction suggestions</h4>
                   <ul id="correctionSuggestions">
                     <li id="suggestionPlaceholder">Run audit to see recommendations.</li>
                   </ul>
                 </div>
+
                 <div class="result-block">
                   <h4>Audit report</h4>
                   <p id="reportPathText">Run audit to generate report path.</p>
@@ -727,6 +754,6 @@
       </section>
     </div>
 
-    <script src="script-v2.js"></script>
+    <script src="script-v2.js?v=20260409-5"></script>
   </body>
 </html>

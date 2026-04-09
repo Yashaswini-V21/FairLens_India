@@ -9,10 +9,9 @@ const defaultFirebaseConfig = {
 };
 
 const localUsersStorageKey = "fairlens-local-users";
-const demoUserEmail = "demo.user@fairlens.dev";
-const demoAccessCode = String(window.FAIRLENS_DEMO_ACCESS_CODE || "demo-access");
-
-const authMode = document.body.dataset.authMode === "signup" ? "signup" : "login";
+const authMode = ["signup", "login", "access"].includes(document.body.dataset.authMode)
+  ? document.body.dataset.authMode
+  : "access";
 const emailInput = document.getElementById("authEmail");
 const passwordInput = document.getElementById("authPassword");
 const confirmInput = document.getElementById("authConfirmPassword");
@@ -42,28 +41,6 @@ const writeLocalUsers = (users) => {
   localStorage.setItem(localUsersStorageKey, JSON.stringify(users));
 };
 
-const ensureDemoUser = () => {
-  const users = readLocalUsers();
-  const index = users.findIndex((user) => String(user?.email || "").toLowerCase() === demoUserEmail);
-
-  if (index >= 0) {
-    users[index] = {
-      ...users[index],
-      email: demoUserEmail,
-      password: demoAccessCode,
-      source: "seeded-demo",
-    };
-  } else {
-    users.push({
-      email: demoUserEmail,
-      password: demoAccessCode,
-      source: "seeded-demo",
-    });
-  }
-
-  writeLocalUsers(users);
-};
-
 const runtimeFirebaseConfig = window.FAIRLENS_FIREBASE_CONFIG;
 
 const hasRequiredFirebaseFields = (config) => {
@@ -85,12 +62,20 @@ const getFirebaseConfig = () => {
   return defaultFirebaseConfig;
 };
 
-const buildLocalDemoToken = (email) => `demo-${Date.now()}-${btoa((email || "user").slice(0, 16))}`;
+const firebaseConfig = getFirebaseConfig();
+const firebaseConfigured = hasRequiredFirebaseFields(firebaseConfig);
+
+const buildLocalSessionToken = (email) => `local-${Date.now()}-${btoa((email || "user").slice(0, 16))}`;
 
 const isInvalidApiKeyError = (error) => {
   const code = String(error?.code || "").toLowerCase();
   const message = String(error?.message || "").toLowerCase();
   return code.includes("api-key-not-valid") || code.includes("invalid-api-key") || message.includes("api-key-not-valid") || message.includes("valid-api-key");
+};
+
+const isUserNotFoundError = (error) => {
+  const code = String(error?.code || "").toLowerCase();
+  return code.includes("user-not-found") || code.includes("invalid-credential") || code.includes("wrong-password");
 };
 
 const createLocalUser = (email, password) => {
@@ -111,11 +96,6 @@ const createLocalUser = (email, password) => {
 
 const verifyLocalUser = (email, password) => {
   const normalizedEmail = String(email || "").trim().toLowerCase();
-
-  if (normalizedEmail === demoUserEmail && String(password || "") === demoAccessCode) {
-    return true;
-  }
-
   const users = readLocalUsers();
   return users.some(
     (user) => String(user?.email || "").toLowerCase() === normalizedEmail && String(user?.password || "") === password
@@ -147,17 +127,26 @@ const initializeAuth = () => {
     return null;
   }
 
+  if (!firebaseConfigured) {
+    setStatus("Firebase is not configured. Using local access mode.");
+    return null;
+  }
+
   try {
-    const firebaseConfig = getFirebaseConfig();
     const app = window.firebase.apps.length ? window.firebase.app() : window.firebase.initializeApp(firebaseConfig);
     return window.firebase.auth(app);
   } catch {
-    setStatus("Firebase config load failed. Using local demo auth mode.", "error");
+    setStatus("Firebase initialization failed. Using local access mode.", "error");
     return null;
   }
 };
 
 const auth = initializeAuth();
+
+if (googleBtn && !auth) {
+  googleBtn.disabled = true;
+  googleBtn.textContent = "Google sign-in unavailable";
+}
 
 const saveUserSession = async (user) => {
   if (!user) {
@@ -168,9 +157,9 @@ const saveUserSession = async (user) => {
   localStorage.setItem(authUserEmailStorageKey, user.email || "signed-in-user");
 };
 
-const saveLocalDemoSession = (email) => {
-  localStorage.setItem(authTokenStorageKey, buildLocalDemoToken(email));
-  localStorage.setItem(authUserEmailStorageKey, email || "demo-user@fairlens.local");
+const saveLocalSession = (email) => {
+  localStorage.setItem(authTokenStorageKey, buildLocalSessionToken(email));
+  localStorage.setItem(authUserEmailStorageKey, email || "local-user@fairlens.local");
 };
 
 const runLocalCredentialFlow = ({ mode, email, password }) => {
@@ -181,8 +170,24 @@ const runLocalCredentialFlow = ({ mode, email, password }) => {
     if (!created.ok) {
       return { ok: false, message: created.message || "Could not create local user." };
     }
-    saveLocalDemoSession(normalizedEmail);
-    return { ok: true, message: "Account created in local demo mode.", tone: "success" };
+    saveLocalSession(normalizedEmail);
+    return { ok: true, message: "Account created successfully.", tone: "success" };
+  }
+
+  if (mode === "access") {
+    const valid = verifyLocalUser(normalizedEmail, password);
+    if (valid) {
+      saveLocalSession(normalizedEmail);
+      return { ok: true, message: "Workspace access granted.", tone: "success" };
+    }
+
+    const created = createLocalUser(normalizedEmail, password);
+    if (!created.ok) {
+      return { ok: false, message: created.message || "Could not create local user.", tone: "error" };
+    }
+
+    saveLocalSession(normalizedEmail);
+    return { ok: true, message: "Workspace created and access granted.", tone: "success" };
   }
 
   const valid = verifyLocalUser(normalizedEmail, password);
@@ -194,28 +199,22 @@ const runLocalCredentialFlow = ({ mode, email, password }) => {
     };
   }
 
-  saveLocalDemoSession(normalizedEmail);
+  saveLocalSession(normalizedEmail);
   return { ok: true, message: "Logged in with local credentials.", tone: "success" };
 };
 
 const getNextRoute = () => {
   const next = (urlParams.get("next") || "").trim().toLowerCase();
-  return next === "audit" ? "index.html?openAudit=1" : "index.html";
+  return next === "audit" ? "audit.html" : "index.html";
 };
 
 const goToHome = () => {
   window.location.href = getNextRoute();
 };
 
-ensureDemoUser();
-
-if (authMode === "login") {
-  setStatus("Demo mode is enabled for local testing.");
-}
-
 if (googleBtn && auth) {
   googleBtn.addEventListener("click", async () => {
-    setLoadingState(true, authMode === "signup" ? "Create Account" : "Login");
+    setLoadingState(true, authMode === "signup" ? "Create Account" : authMode === "access" ? "Enter Workspace" : "Login");
     try {
       const provider = new window.firebase.auth.GoogleAuthProvider();
       const result = await auth.signInWithPopup(provider);
@@ -229,7 +228,7 @@ if (googleBtn && auth) {
       }
       setStatus(error?.message || "Google sign-in failed.", "error");
     } finally {
-      setLoadingState(false, authMode === "signup" ? "Create Account" : "Login");
+      setLoadingState(false, authMode === "signup" ? "Create Account" : authMode === "access" ? "Enter Workspace" : "Login");
     }
   });
 }
@@ -252,16 +251,35 @@ if (authForm) {
       return;
     }
 
-    setLoadingState(true, authMode === "signup" ? "Create Account" : "Login");
+    setLoadingState(true, authMode === "signup" ? "Create Account" : authMode === "access" ? "Enter Workspace" : "Login");
 
     try {
       if (auth) {
-        const result = authMode === "signup"
-          ? await auth.createUserWithEmailAndPassword(email, password)
-          : await auth.signInWithEmailAndPassword(email, password);
+        let result;
+        if (authMode === "signup") {
+          result = await auth.createUserWithEmailAndPassword(email, password);
+        } else if (authMode === "access") {
+          try {
+            result = await auth.signInWithEmailAndPassword(email, password);
+          } catch (error) {
+            if (!isUserNotFoundError(error)) {
+              throw error;
+            }
+            result = await auth.createUserWithEmailAndPassword(email, password);
+          }
+        } else {
+          result = await auth.signInWithEmailAndPassword(email, password);
+        }
 
         await saveUserSession(result.user);
-        setStatus(authMode === "signup" ? "Account created successfully." : "Logged in successfully.", "success");
+        setStatus(
+          authMode === "signup"
+            ? "Account created successfully."
+            : authMode === "access"
+              ? "Workspace access granted."
+              : "Logged in successfully.",
+          "success"
+        );
         window.setTimeout(goToHome, 500);
         return;
       }
@@ -272,7 +290,7 @@ if (authForm) {
         return;
       }
 
-      setStatus(`${localResult.message} (Local demo mode)`, "success");
+      setStatus(`${localResult.message} (Local mode)`, "success");
       window.setTimeout(goToHome, 500);
     } catch (error) {
       const localResult = runLocalCredentialFlow({ mode: authMode, email, password });
@@ -288,7 +306,7 @@ if (authForm) {
       const firebaseMessage = String(error?.message || "Authentication failed.");
       setStatus(`${firebaseMessage} Also local fallback failed: ${localResult.message || "unknown error"}`, "error");
     } finally {
-      setLoadingState(false, authMode === "signup" ? "Create Account" : "Login");
+      setLoadingState(false, authMode === "signup" ? "Create Account" : authMode === "access" ? "Enter Workspace" : "Login");
     }
   });
 }
