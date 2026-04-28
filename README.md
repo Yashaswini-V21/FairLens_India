@@ -46,7 +46,18 @@
 
 ---
 
-## 🌍🤖 AI Product Snapshot
+## �📽️ Project Presentation & Demo
+
+> 📺 Watch our full system in action and review our technical proposal.
+
+| Resource | Link |
+|---|---|
+| **YouTube Demo** | [▶️ Watch Video Demo](https://youtu.be/pqv3RcTO4zc) |
+| **Project Presentation** | [📄 View PDF](<./Cognitive Codes [Google Solution Challenge 2026] (1).pdf>) |
+
+---
+
+## �🌍🤖 AI Product Snapshot
 
 > 🌐 FairLens India is an AI fairness intelligence platform for high-impact model decisions.
 
